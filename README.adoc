@@ -1,0 +1,56 @@
+hws
+===
+Fabien Dubosson <fabien.dubosson@gmail.com>
+0.0.1, 2015-03-05: Development started.
+
+A workspace manager for hackers.
+
+
+Contributing
+------------
+
+Branching::
+This software follows the Vincent Driessen's http://nvie.com/posts/a-successful-git-branching-model/[git branching model].
+
+Pull requests::
+Sending patches by mail are prefered over Github's Pull Requests. If Pull Requests are sent through Github, the patches will be merged after review and rewording. Original author's name will be kept and commit will be signed-off.
+
+Commit messages::
+Git commit messages are better if they can follow Tim Pope's http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html[note].
+
+
+Versioning 
+----------
+
+This software uses http://semver.org/spec/v2.0.0.html[semantic versioning v2.0.0]. Version numbers are of the form:
+
+----
+MAJOR.MINOR.PATCH
+----
+
+- +MAJOR+ increases with *big changes* or with backwards-incompatible API changes.
+- +MINOR+ increases with functionality added in a backwards-compatible manner.
+- +PATCH+ increases with backwards-compatible bug fixes.
+
+
+License
+-------
+
+....
+hws: A workspace manager for hackers
+Copyright (C) 2015  Fabien Dubosson
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along
+with this program; if not, write to the Free Software Foundation, Inc.,
+51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+....
