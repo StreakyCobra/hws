@@ -1,9 +1,12 @@
 OCBFLAGS := -classic-display
 OCB := ocamlbuild $(OCBFLAGS)
 
+ML_FILES := $(shell find ./src/ -name "*.ml")
+CMA_FILES := $(ML_FILES:.ml=.cma)
+
 all: src/main.native
 
-debug: all src/main.cma
+debug: all $(CMA_FILES)
 
 clean:
 	$(OCB) -clean

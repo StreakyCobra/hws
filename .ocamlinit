@@ -4,10 +4,11 @@
 #use "topfind" ;;
 
 (* Require all dependencies *)
-#require "batteries" ;;
+#require "unix" ;;
 
-(* Specify directory *)
+(* Change directory *)
 #directory "_build/src" ;;
 
 (* load all local packages *)
 #load "main.cma" ;;
+#load "display/ansi.cma" ;;

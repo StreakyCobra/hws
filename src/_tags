@@ -1,1 +1,2 @@
 true: strict_sequence
+true: package(unix)

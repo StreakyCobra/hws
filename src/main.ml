@@ -15,8 +15,11 @@
  * You should have received a copy of the GNU General Public License
  * along with hws.  If not, see <http://www.gnu.org/licenses/>. *)
 
-open Printf;;
+open Ansi;;
 
-let main () = printf "Hello, World\n"
+let main () =
+  print [green] "Hello, ";
+  print [] "World";
+  print_nl [hi_blue; Bold] "!"
 
 let () = if not !Sys.interactive then main ()
