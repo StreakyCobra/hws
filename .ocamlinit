@@ -1,0 +1,13 @@
+(* -*- mode: tuareg; -*- *)
+
+(* Use topfind to find packages *)
+#use "topfind" ;;
+
+(* Require all dependencies *)
+#require "batteries" ;;
+
+(* Specify directory *)
+#directory "_build/src" ;;
+
+(* load all local packages *)
+#load "main.cma" ;;
