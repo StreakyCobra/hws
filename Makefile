@@ -6,6 +6,11 @@ CMA_FILES := $(ML_FILES:.ml=.cma)
 
 all: src/main.native
 
+doc: hws.docdir/index.html
+
+viewdoc: hws.docdir/index.html
+	xdg-open $<
+
 debug: all $(CMA_FILES)
 
 clean:
@@ -15,6 +20,8 @@ clean:
 top: debug
 	utop
 
+hws.docdir/index.html:
+	$(OCB) $@
 %.cma:
 	$(OCB) $@
 %.cmxa:
@@ -22,4 +29,4 @@ top: debug
 %.native:
 	$(OCB) $@
 
-.PHONY: all debug clean top
+.PHONY: all doc viewdoc debug clean top
