@@ -15,11 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with hws.  If not, see <http://www.gnu.org/licenses/>. *)
 
-(** ANSI escape codes and facilites. *)
-
 open Printf;;
 
-(** ANSI color type. *)
+(* ANSI color type. *)
 type color =
   | Black
   | Red
@@ -30,7 +28,7 @@ type color =
   | Cyan
   | White
 
-(** ANSI style type. *)
+(* ANSI style type. *)
 type style =
   | Reset
   | Bold
@@ -42,7 +40,7 @@ type style =
   | IntensiveForeground of color
   | IntensiveBackground of color
 
-(** ANSI command type. *)
+(* ANSI command type. *)
 type command =
   | LineUp of int
   | LineDown of int
@@ -103,7 +101,7 @@ let on_hi_white   = IntensiveBackground White
 (* Sequences helpers *)
 let reline = [ClearLine; MvFirstColumn]
 
-(** Transform a color type to its corresponding ANSI code. *)
+(* Type to code conversion *)
 let color_code col = match col with
   | Black   -> 0
   | Red     -> 1
@@ -114,7 +112,6 @@ let color_code col = match col with
   | Cyan    -> 6
   | White   -> 7
 
-(** Transform a SGR style to its corresponding ANSI code. *)
 let sgr_code sty = match sty with
   | Reset                   -> 0
   | Bold                    -> 1
@@ -126,7 +123,6 @@ let sgr_code sty = match sty with
   | IntensiveForeground col -> 90 + (color_code col)
   | IntensiveBackground col -> 100 + (color_code col)
 
-(** Transform a list of SGR style into its corresponding ANSI sequence. *)
 let rec sgr styles =
   let beg = if styles = [] then "" else csi in
   let rec sgr' styles = match styles with
@@ -136,7 +132,6 @@ let rec sgr styles =
   in
   beg ^ sgr' styles
 
-(** Transform a command to its corresponding ANSI code. *)
 let ansi_code seq = match seq with
   | LineUp n    -> string_of_int n ^ "F"
   | LineDown n  -> string_of_int n ^ "E"
@@ -148,7 +143,6 @@ let ansi_code seq = match seq with
   | ClearLine   -> "2K"
   | MvFirstColumn  -> "0G"
 
-(** Transform a list of commands into its corresponding ANSI sequence. *)
 let rec ansi cmds =
   let beg = if cmds = [] then "" else csi in
   beg ^ match cmds with
@@ -156,38 +150,27 @@ let rec ansi cmds =
   | x::[] -> ansi_code x
   | x::xs -> ansi_code x ^ css ^ ansi xs
 
-(** Reference to a boolean specifying if the output is a TTY. *)
+(* TTY handling *)
 let tty = ref @@ Unix.isatty Unix.stdout
 
-(** Helper to change the TTY mode to true/false, what enables/disables colored
-  * output. *)
-let set_tty v =
-  tty := v
+let set_tty v = tty := v
 
-(** Helper to reset the terminal appearance to its default. *)
-let reset_styles () =
-  if !tty then
-    printf "%s" (sgr [Reset])
-  else
-    ()
-
-(** Helper to print a text with the given list of styles applied before, and
-  * reseted after. *)
-let print styles text =
+(* Printing helpers *)
+let set_styles styles =
   let esc_code = if !tty then sgr styles else "" in
-  printf "%s%s" esc_code text;
+  printf "%s" esc_code
+
+let reset_styles () =
+  set_styles [Reset]
+
+let print styles text =
+  set_styles styles;
+  printf "%s" text;
   reset_styles ()
 
-(** Helper to print a text with the given list of styles applied before, and
-  * reseted after. Append a newline at the end of the string. *)
 let print_nl styles text =
   print styles @@ text ^ nl
 
-(** Helper to set the styles of what will be printed afterward. *)
-let set_styles styles =
-  print styles ""
-
-(** Helper to execute a given list of commands. *)
 let exec_cmds cmds =
   let esc_code = if !tty then ansi cmds else "" in
   printf "%s" esc_code
