@@ -1,2 +1,3 @@
 <src>: include
 <src/display>: include
+<tests>: include
