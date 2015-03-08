@@ -9,6 +9,10 @@ DOC_FILE := hws.docdir/index.html
 
 all: $(EXE_FILE)
 
+run:
+	@$(MAKE) all
+	$(shell pwd)/$(shell basename $(EXE_FILE))
+
 doc: 
 	$(OCB) $(DOC_FILE)
 
@@ -31,4 +35,4 @@ top: debug
 %.native:
 	$(OCB) $@
 
-.PHONY: all doc viewdoc debug clean top
+.PHONY: all run doc viewdoc debug clean top
