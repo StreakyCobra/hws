@@ -4,12 +4,16 @@ OCB := ocamlbuild $(OCBFLAGS)
 ML_FILES := $(shell find ./src/ -name "*.ml")
 CMA_FILES := $(ML_FILES:.ml=.cma)
 
-all: src/main.native
+EXE_FILE := src/main.native
+DOC_FILE := hws.docdir/index.html
 
-doc: hws.docdir/index.html
+all: $(EXE_FILE)
 
-viewdoc: hws.docdir/index.html
-	xdg-open $<
+doc: 
+	$(OCB) $(DOC_FILE)
+
+viewdoc: doc
+	xdg-open $(DOC_FILE)
 
 debug: all $(CMA_FILES)
 
@@ -20,8 +24,6 @@ clean:
 top: debug
 	utop
 
-hws.docdir/index.html:
-	$(OCB) $@
 %.cma:
 	$(OCB) $@
 %.cmxa:
