@@ -102,7 +102,7 @@ let on_hi_white   = IntensiveBackground White
 let reline = [ClearLine; MvFirstColumn]
 
 (* Type to code conversion *)
-let color_code col = match col with
+let color_code = function
   | Black   -> 0
   | Red     -> 1
   | Green   -> 2
@@ -112,7 +112,7 @@ let color_code col = match col with
   | Cyan    -> 6
   | White   -> 7
 
-let sgr_code sty = match sty with
+let sgr_code = function
   | Reset                   -> 0
   | Bold                    -> 1
   | Underline               -> 4
@@ -123,16 +123,7 @@ let sgr_code sty = match sty with
   | IntensiveForeground col -> 90 + (color_code col)
   | IntensiveBackground col -> 100 + (color_code col)
 
-let rec sgr styles =
-  let beg = if styles = [] then "" else csi in
-  let rec sgr' styles = match styles with
-    | []    -> ""
-    | x::[] -> string_of_int (sgr_code x) ^ sgr_end
-    | x::xs -> string_of_int (sgr_code x) ^ css ^ (sgr' xs)
-  in
-  beg ^ sgr' styles
-
-let ansi_code seq = match seq with
+let ansi_code = function
   | LineUp n    -> string_of_int n ^ "F"
   | LineDown n  -> string_of_int n ^ "E"
   | Up n        -> string_of_int n ^ "A"
@@ -142,6 +133,15 @@ let ansi_code seq = match seq with
   | ClearScreen -> "2J"
   | ClearLine   -> "2K"
   | MvFirstColumn  -> "0G"
+
+let rec sgr styles =
+  let beg = if styles = [] then "" else csi in
+  let rec sgr' styles = match styles with
+    | []    -> ""
+    | x::[] -> string_of_int (sgr_code x) ^ sgr_end
+    | x::xs -> string_of_int (sgr_code x) ^ css ^ (sgr' xs)
+  in
+  beg ^ sgr' styles
 
 let rec ansi cmds =
   let beg = if cmds = [] then "" else csi in
