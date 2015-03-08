@@ -13,3 +13,4 @@
 (* load all local packages *)
 #load "main.cma" ;;
 #load "ansi.cma" ;;
+#load "version.cma" ;;

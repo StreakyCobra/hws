@@ -6,6 +6,7 @@ CMA_FILES := $(ML_FILES:.ml=.cma)
 
 EXE_FILE := src/main.native
 DOC_FILE := hws.docdir/index.html
+VERSION_FILE = src/version.ml
 
 all: $(EXE_FILE)
 
@@ -19,11 +20,11 @@ doc:
 viewdoc: doc
 	xdg-open $(DOC_FILE)
 
-debug: all $(CMA_FILES)
+debug: all $(VERSION_FILE:.ml=.cma)
 
 clean:
 	$(OCB) -clean
-	$(RM) src/version.ml*
+	$(RM) $(VERSION_FILE)*
 
 top: debug
 	utop
