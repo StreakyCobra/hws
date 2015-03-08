@@ -6,9 +6,10 @@
 (* Require all dependencies *)
 #require "unix" ;;
 
-(* Change directory *)
+(* Add directories *)
 #directory "_build/src" ;;
+#directory "_build/src/display" ;;
 
 (* load all local packages *)
 #load "main.cma" ;;
-#load "display/ansi.cma" ;;
+#load "ansi.cma" ;;
