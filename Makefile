@@ -1,41 +1,65 @@
+# ocamlbuild variables
 OCBFLAGS := -classic-display
 OCB := ocamlbuild $(OCBFLAGS)
 
-SRC_FILES := $(shell find ./src/ -name "*.ml")
-TESTS_FILES := $(shell find ./tests/ -name "*.ml")
+# Files extensions
+ML_EXT := ".ml"
+CMA_EXT := ".cma"
 
+# Directories
+SRC_DIR := "src"
+TESTS_DIR := "tests"
+
+# Sources files
+SRC_FILES := $(shell find $(SRC_DIR) -name "*$(ML_EXT)")
+TESTS_FILES := $(shell find $(TESTS_DIR) -name "*$(ML_EXT)")
+VERSION_FILE = $(SRC_DIR)/version.ml
+DOC_FILE := hws.docdir/index.html
+
+# Compiled files
 SRC_CMA_FILES := $(SRC_FILES:.ml=.cma)
 TESTS_CMA_FILES := $(TESTS_FILES:.ml=.cma)
+VERSION_CMA_FILE = $(VERSION_FILE:.ml=.cma)
 
-MAIN_EXE := src/main.native
-TESTS_EXE := tests/tests.native
+# Executables
+SRC_EXE := $(SRC_DIR)/main.native
+TESTS_EXE := $(TESTS_DIR)/tests.native
 
-DOC_FILE := hws.docdir/index.html
-VERSION_FILE = src/version.ml
+# Default target
 
-all: $(MAIN_EXE)
+all: build
 
-run:
-	$(MAKE) all
-	$(shell pwd)/$(shell basename $(MAIN_EXE))
+# Compilation targets
 
-tests: all $(TESTS_EXE)
-	$(shell pwd)/$(shell basename $(TESTS_EXE))
+build: $(SRC_EXE)
 
-doc: 
-	$(OCB) $(DOC_FILE)
+debug: $(SRC_CMA_FILES) $(TESTS_CMA_FILES) $(VERSION_CMA_FILE)
 
-viewdoc: doc
+tests: $(TESTS_EXE)
+
+doc: $(DOC_FILE)
+
+# Launchers
+
+run: $(SRC_EXE)
+	@./`basename $<`
+
+runtests: $(TESTS_EXE)
+	@./`basename $<`
+
+viewdoc: $(DOC_FILE)
 	xdg-open $(DOC_FILE)
 
-debug: all $(SRC_CMA_FILES) $(TESTS_CMA_FILES) $(VERSION_FILE:.ml=.cma)
+top: debug
+	utop
+
+# Clean all this
 
 clean:
 	$(OCB) -clean
 	$(RM) $(VERSION_FILE)*
 
-top: debug
-	utop
+# Files extension targets
 
 %.cma:
 	$(OCB) $@
@@ -43,5 +67,7 @@ top: debug
 	$(OCB) $@
 %.native:
 	$(OCB) $@
+%.html:
+	$(OCB) $@
 
-.PHONY: all run tests doc viewdoc debug clean top
+.PHONY: all run tests runtests doc viewdoc debug clean top
