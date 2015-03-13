@@ -56,7 +56,9 @@ run: $(SRC_EXE)
 	@./`basename $<` $(RUN_ARGS) || true
 
 runtests: $(TESTS_EXE)
-	@./`basename $<`
+	@echo "================================================================"
+	@echo
+	@./`basename $<` || true
 
 viewdoc: $(DOC_FILE)
 	xdg-open $(DOC_FILE)
