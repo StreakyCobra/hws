@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with hws.  If not, see <http://www.gnu.org/licenses/>. *)
 
-open Subcommand;;
+open Command;;
 
-module Cmd : Subcommand =
+module Cmd : Command =
 struct
   let key = "status"
   let doc = "Show the workspace status"

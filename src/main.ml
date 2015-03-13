@@ -15,45 +15,46 @@
  * You should have received a copy of the GNU General Public License
  * along with hws.  If not, see <http://www.gnu.org/licenses/>. *)
 
-open Subcommand;;
+open Command;;
 
-(* Reference to the selected command. *)
-let cmd : (module Subcommand) option ref = ref None
+(* Reference to the command passed as argument. *)
+let cmd : command option ref = ref None
 
-(* The list of commands. *)
-let cmds_list : (module Subcommand) list = [
+(* Transform a command into a Arg.spec definition. *)
+let cmd_to_spec (module Cmd : Command) =
+  (Cmd.key, Arg.Unit (fun () -> ()), Cmd.doc)
+
+(* The list of commands available. *)
+let cmds_list : command list = [
   (module Cmd_init.Cmd);
   (module Cmd_status.Cmd)
 ]
 
-(* Transform a command into a spec for the Arg module. *)
-let cmd_to_spec (module Cmd : Subcommand) =
-  (Cmd.key, Arg.Unit (fun () -> ()), Cmd.doc)
-
 (* Construct the list of commands' specifications. *)
-let cmds_spec = List.map cmd_to_spec cmds_list
+let cmds_spec = Arg.align @@ List.map cmd_to_spec cmds_list
 
+(* Reference to the current arguments spec. *)
 let spec = ref cmds_spec
 
 (* Change the context regarding to the command. *)
-let cmds_change arg = 
-  let rec find_cmd cmds : (module Subcommand)= match cmds with
+let switch_cmd arg = 
+  let rec find_cmd cmds : command = match cmds with
     | [] -> raise @@ Arg.Bad (arg ^ " is not a recognized subcommand")
-    | (module Cmd : Subcommand) :: xs -> if arg = Cmd.key then (module Cmd) else find_cmd xs in
+    | (module Cmd : Command) :: xs -> if arg = Cmd.key then (module Cmd) else find_cmd xs in
   let (module Cmd) = find_cmd cmds_list in
   cmd := Some (module Cmd);
-  spec := Cmd.spec
+  spec := Arg.align @@ Cmd.spec
 
 (* Execute the selected command. *)
-let execute_cmd () = match !cmd with
-  | Some (module Cmd : Subcommand) -> Cmd.execute ()
+let run_cmd () = match !cmd with
+  | Some (module Cmd) -> Cmd.execute ()
   | None -> raise @@ Arg.Bad "Internal Error"
 
-(* Main function. *)
+(* Main function, run the application. *)
 let main () =
-  let desc = "TODO: The hws description" in
-  Arg.parse_dynamic spec cmds_change desc;
-  execute_cmd ()
+  let description = "hws, A workspace manager for hackers." in
+  Arg.parse_dynamic spec switch_cmd description;
+  run_cmd ()
 
-(* Make it execute, except when lunch from toplevel. *)
+(* Execute the main function, except when launched from the toplevel. *)
 let () = if not !Sys.interactive then main ()

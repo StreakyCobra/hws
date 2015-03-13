@@ -15,10 +15,12 @@
  * You should have received a copy of the GNU General Public License
  * along with hws.  If not, see <http://www.gnu.org/licenses/>. *)
 
-module type Subcommand =
+module type Command =
 sig
   val key : string
   val doc : string
   val spec : (Arg.key * Arg.spec * Arg.doc) list
   val execute : unit -> unit
 end
+
+type command = (module Command)
