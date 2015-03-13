@@ -1,4 +1,5 @@
-# If the first argument is "run"...
+# If the first argument is "run", disable other given command line arguments
+# (interpreted as targets) and give them as arguments to the program.
 ifeq (run,$(firstword $(MAKECMDGOALS)))
   # use the rest as arguments for "run"
   RUN_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
