@@ -15,11 +15,29 @@
  * You should have received a copy of the GNU General Public License
  * along with hws.  If not, see <http://www.gnu.org/licenses/>. *)
 
-open Ansi;;
+(* The list of commands. *)
+let cmds_list : (module Command.Cmd) list = [
+  (module Cmd_init.Cmd);
+  (module Cmd_status.Cmd)
+]
 
+(* Transform a command into a spec for the Arg module. *)
+let cmd_to_spec (module Cmd : Command.Cmd) =
+  (Cmd.key, Arg.Unit (fun () -> ()), Cmd.desc)
+
+(* Change the context regarding to the command. *)
+let cmds_change arg = 
+  if arg = Cmd_init.Cmd.key then Cmd_init.Cmd.execute ()
+  else if arg = Cmd_status.Cmd.key then Cmd_status.Cmd.execute ()
+  else raise @@ Arg.Bad (arg ^ " is not a recognized argument")
+
+(* Construct the list of commands' specifications. *)
+let cmds_spec = ref @@ List.map cmd_to_spec cmds_list
+
+(* Main function. *)
 let main () =
-  print [green] "Hello, ";
-  print [] "World";
-  print_nl [hi_blue; Bold] "!"
+  let desc = "TODO: The hws description" in
+  Arg.parse_dynamic cmds_spec cmds_change desc
 
+(* Make it execute, except when lunch from toplevel. *)
 let () = if not !Sys.interactive then main ()
