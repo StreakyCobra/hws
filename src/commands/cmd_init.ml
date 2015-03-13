@@ -20,7 +20,9 @@ open Command;;
 module Cmd : Command =
 struct
   let key = "init"
-  let doc = "Initialize the workspace"
+  (* First space needed for help message alignment *)
+  let doc = " Initialize the workspace"
   let spec = []
+  let anon_arg _ = raise @@ Arg.Bad "Not supported"
   let execute () = print_endline "Init command called"
 end

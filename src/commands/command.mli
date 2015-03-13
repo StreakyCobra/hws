@@ -20,6 +20,7 @@ sig
   val key : string
   val doc : string
   val spec : (Arg.key * Arg.spec * Arg.doc) list
+  val anon_arg : string -> unit
   val execute : unit -> unit
 end
 

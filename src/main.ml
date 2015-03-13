@@ -17,44 +17,50 @@
 
 open Command;;
 
-(* Reference to the command passed as argument. *)
+(* Reference to the command passed as argument *)
 let cmd : command option ref = ref None
 
-(* Transform a command into a Arg.spec definition. *)
+(* Transform a command into a Arg.spec definition *)
 let cmd_to_spec (module Cmd : Command) =
-  (Cmd.key, Arg.Unit (fun () -> ()), Cmd.doc)
+  (Cmd.key, Arg.Set (ref false), Cmd.doc)
 
-(* The list of commands available. *)
+(* The list of commands available *)
 let cmds_list : command list = [
   (module Cmd_init.Cmd);
-  (module Cmd_status.Cmd)
+  (module Cmd_status.Cmd);
 ]
 
-(* Construct the list of commands' specifications. *)
+(* Construct the list of commands' specifications *)
 let cmds_spec = Arg.align @@ List.map cmd_to_spec cmds_list
 
-(* Reference to the current arguments spec. *)
+(* Reference to the current arguments spec *)
 let spec = ref cmds_spec
 
-(* Change the context regarding to the command. *)
+(* Change the context regarding to the command *)
 let switch_cmd arg = 
-  let rec find_cmd cmds : command = match cmds with
-    | [] -> raise @@ Arg.Bad (arg ^ " is not a recognized subcommand")
-    | (module Cmd : Command) :: xs -> if arg = Cmd.key then (module Cmd) else find_cmd xs in
-  let (module Cmd) = find_cmd cmds_list in
-  cmd := Some (module Cmd);
-  spec := Arg.align @@ Cmd.spec
+  if !Arg.current = 1 then
+    begin
+      let rec find_cmd cmds : command = match cmds with
+        | [] -> raise @@ Arg.Bad (arg ^ " is not a recognized subcommand")
+        | (module Cmd : Command) :: xs -> if arg = Cmd.key then (module Cmd) else find_cmd xs in
+      let (module Cmd) = find_cmd cmds_list in
+      cmd := Some (module Cmd);
+      spec := Arg.align @@ Cmd.spec;
+    end
+  else match !cmd with
+  | Some (module Cmd) -> Cmd.anon_arg arg
+  | None -> raise @@ Arg.Bad (arg ^ " is not a recognized parameters")
 
-(* Execute the selected command. *)
+(* Execute the selected command *)
 let run_cmd () = match !cmd with
   | Some (module Cmd) -> Cmd.execute ()
   | None -> raise @@ Arg.Bad "Internal Error"
 
-(* Main function, run the application. *)
+(* Main function, run the application *)
 let main () =
   let description = "hws, A workspace manager for hackers." in
   Arg.parse_dynamic spec switch_cmd description;
   run_cmd ()
 
-(* Execute the main function, except when launched from the toplevel. *)
+(* Execute the main function, except when launched from the toplevel *)
 let () = if not !Sys.interactive then main ()

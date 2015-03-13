@@ -17,10 +17,14 @@
 
 open Command;;
 
+let lst = ref []
+
 module Cmd : Command =
 struct
   let key = "status"
-  let doc = "Show the workspace status"
+  (* First space needed for help message alignment *)
+  let doc = " Show the workspace status"
   let spec = []
-  let execute () = print_endline "Status command called"
+  let anon_arg arg = lst := !lst @ [arg]
+  let execute () = print_string (String.concat " " !lst); print_endline ""
 end

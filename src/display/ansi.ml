@@ -17,7 +17,7 @@
 
 open Printf;;
 
-(* ANSI color type. *)
+(* ANSI color type *)
 type color =
   | Black
   | Red
@@ -28,7 +28,7 @@ type color =
   | Cyan
   | White
 
-(* ANSI style type. *)
+(* ANSI style type *)
 type style =
   | Reset
   | Bold
@@ -40,7 +40,7 @@ type style =
   | IntensiveForeground of color
   | IntensiveBackground of color
 
-(* ANSI command type. *)
+(* ANSI command type *)
 type command =
   | LineUp of int
   | LineDown of int
