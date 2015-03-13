@@ -15,6 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with hws.  If not, see <http://www.gnu.org/licenses/>. *)
 
+(* Reference to the selected command. *)
+let cmd : (module Command.Cmd) option ref = ref None
+
 (* The list of commands. *)
 let cmds_list : (module Command.Cmd) list = [
   (module Cmd_init.Cmd);
@@ -23,21 +26,32 @@ let cmds_list : (module Command.Cmd) list = [
 
 (* Transform a command into a spec for the Arg module. *)
 let cmd_to_spec (module Cmd : Command.Cmd) =
-  (Cmd.key, Arg.Unit (fun () -> ()), Cmd.desc)
+  (Cmd.key, Arg.Unit (fun () -> ()), Cmd.doc)
+
+(* Construct the list of commands' specifications. *)
+let cmds_spec = List.map cmd_to_spec cmds_list
+
+let spec = ref cmds_spec
 
 (* Change the context regarding to the command. *)
 let cmds_change arg = 
-  if arg = Cmd_init.Cmd.key then Cmd_init.Cmd.execute ()
-  else if arg = Cmd_status.Cmd.key then Cmd_status.Cmd.execute ()
-  else raise @@ Arg.Bad (arg ^ " is not a recognized argument")
+  let rec find_cmd cmds : (module Command.Cmd)= match cmds with
+    | [] -> raise @@ Arg.Bad (arg ^ " is not a recognized subcommand")
+    | (module Cmd : Command.Cmd) :: xs -> if arg = Cmd.key then (module Cmd) else find_cmd xs in
+  let (module Cmd) = find_cmd cmds_list in
+  cmd := Some (module Cmd);
+  spec := Cmd.spec
 
-(* Construct the list of commands' specifications. *)
-let cmds_spec = ref @@ List.map cmd_to_spec cmds_list
+(* Execute the selected command. *)
+let execute_cmd () = match !cmd with
+  | Some (module Cmd : Command.Cmd) -> Cmd.execute ()
+  | None -> raise @@ Arg.Bad "Internal Error"
 
 (* Main function. *)
 let main () =
   let desc = "TODO: The hws description" in
-  Arg.parse_dynamic cmds_spec cmds_change desc
+  Arg.parse_dynamic spec cmds_change desc;
+  execute_cmd ()
 
 (* Make it execute, except when lunch from toplevel. *)
 let () = if not !Sys.interactive then main ()

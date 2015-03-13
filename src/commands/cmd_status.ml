@@ -18,7 +18,7 @@
 module Cmd : Command.Cmd =
 struct
   let key = "status"
-  let desc = "Show the workspace status"
-  let options = []
+  let doc = "Show the workspace status"
+  let spec = []
   let execute () = print_endline "Status command called"
 end

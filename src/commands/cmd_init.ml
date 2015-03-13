@@ -18,7 +18,7 @@
 module Cmd : Command.Cmd =
 struct
   let key = "init"
-  let desc = "Initialize the workspace"
-  let options = []
+  let doc = "Initialize the workspace"
+  let spec = []
   let execute () = print_endline "Init command called"
 end

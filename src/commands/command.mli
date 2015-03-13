@@ -18,7 +18,7 @@
 module type Cmd =
 sig
   val key : string
-  val desc : string
-  val options : (Arg.key * Arg.spec * Arg.doc) list
+  val doc : string
+  val spec : (Arg.key * Arg.spec * Arg.doc) list
   val execute : unit -> unit
 end
