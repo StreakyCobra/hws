@@ -15,17 +15,19 @@
  * You should have received a copy of the GNU General Public License
  * along with hws.  If not, see <http://www.gnu.org/licenses/>. *)
 
+open Subcommand;;
+
 (* Reference to the selected command. *)
-let cmd : (module Command.Cmd) option ref = ref None
+let cmd : (module Subcommand) option ref = ref None
 
 (* The list of commands. *)
-let cmds_list : (module Command.Cmd) list = [
+let cmds_list : (module Subcommand) list = [
   (module Cmd_init.Cmd);
   (module Cmd_status.Cmd)
 ]
 
 (* Transform a command into a spec for the Arg module. *)
-let cmd_to_spec (module Cmd : Command.Cmd) =
+let cmd_to_spec (module Cmd : Subcommand) =
   (Cmd.key, Arg.Unit (fun () -> ()), Cmd.doc)
 
 (* Construct the list of commands' specifications. *)
@@ -35,16 +37,16 @@ let spec = ref cmds_spec
 
 (* Change the context regarding to the command. *)
 let cmds_change arg = 
-  let rec find_cmd cmds : (module Command.Cmd)= match cmds with
+  let rec find_cmd cmds : (module Subcommand)= match cmds with
     | [] -> raise @@ Arg.Bad (arg ^ " is not a recognized subcommand")
-    | (module Cmd : Command.Cmd) :: xs -> if arg = Cmd.key then (module Cmd) else find_cmd xs in
+    | (module Cmd : Subcommand) :: xs -> if arg = Cmd.key then (module Cmd) else find_cmd xs in
   let (module Cmd) = find_cmd cmds_list in
   cmd := Some (module Cmd);
   spec := Cmd.spec
 
 (* Execute the selected command. *)
 let execute_cmd () = match !cmd with
-  | Some (module Cmd : Command.Cmd) -> Cmd.execute ()
+  | Some (module Cmd : Subcommand) -> Cmd.execute ()
   | None -> raise @@ Arg.Bad "Internal Error"
 
 (* Main function. *)

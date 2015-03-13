@@ -15,7 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with hws.  If not, see <http://www.gnu.org/licenses/>. *)
 
-module Cmd : Command.Cmd =
+open Subcommand;;
+
+module Cmd : Subcommand =
 struct
   let key = "init"
   let doc = "Initialize the workspace"
