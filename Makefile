@@ -51,7 +51,9 @@ doc: $(DOC_FILE)
 # Launchers
 
 run: $(SRC_EXE)
-	@./`basename $<` $(RUN_ARGS)
+	@echo "================================================================"
+	@echo
+	@./`basename $<` $(RUN_ARGS) || true
 
 runtests: $(TESTS_EXE)
 	@./`basename $<`
