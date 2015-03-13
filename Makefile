@@ -1,4 +1,12 @@
-# ocamlbuild variables
+# If the first argument is "run"...
+ifeq (run,$(firstword $(MAKECMDGOALS)))
+  # use the rest as arguments for "run"
+  RUN_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+  # ...and turn them into do-nothing targets
+  $(eval $(RUN_ARGS):;@:)
+endif# ocamlbuild variables
+
+# ocamlbuild related 
 OCBFLAGS := -classic-display
 OCB := ocamlbuild $(OCBFLAGS)
 
@@ -42,7 +50,7 @@ doc: $(DOC_FILE)
 # Launchers
 
 run: $(SRC_EXE)
-	@./`basename $<`
+	@./`basename $<` $(RUN_ARGS)
 
 runtests: $(TESTS_EXE)
 	@./`basename $<`
