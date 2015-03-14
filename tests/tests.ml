@@ -21,4 +21,8 @@ open OUnit2;;
 let suite =
   "suite">::: Test_ansi.all
 
-let () = run_test_tt_main suite;;
+let main () =
+  run_test_tt_main suite;;
+
+(* Execute the main function, except when launched from the toplevel *)
+let () = if not !Sys.interactive then main ()
