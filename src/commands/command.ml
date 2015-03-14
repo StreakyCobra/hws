@@ -10,6 +10,5 @@ end
 
 type command = (module Command)
 
-(* Transform a command into a Arg.spec definition *)
 let cmd_to_specs (module Cmd : Command) =
   (Ansi.format [Ansi.red] Cmd.key , Arg.Set (ref false), Cmd.doc)

@@ -15,6 +15,8 @@
  * You should have received a copy of the GNU General Public License
  * along with hws.  If not, see <http://www.gnu.org/licenses/>. *)
 
+(** Define the Command module. *)
+
 module type Command =
 sig
   val key : string
@@ -28,3 +30,4 @@ end
 type command = (module Command)
 
 val cmd_to_specs : command -> (Arg.key * Arg.spec * Arg.doc)
+(** Transform a command into its Arg specification. *)
