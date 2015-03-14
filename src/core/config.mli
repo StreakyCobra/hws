@@ -15,6 +15,12 @@
  * You should have received a copy of the GNU General Public License
  * along with hws.  If not, see <http://www.gnu.org/licenses/>. *)
 
-let colored = ref true
-let verbose = ref false
-let powerline = ref false
+val colored : bool ref
+(** Boolean reference to enable/disable colored output. Enabled by default. *)
+
+val verbose : bool ref
+(** Boolean reference to enable/disable verbose output. Disabled by default. *)
+
+val powerline : bool ref
+(** Boolean reference to enable/disable use of powerline glyphs. Disabled by
+  * default. *)
