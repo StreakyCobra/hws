@@ -25,4 +25,4 @@ val verbose : bool ref
 
 val powerline : bool ref
 (** Boolean reference to enable/disable use of powerline glyphs. Disabled by
-  * default. *)
+    default. *)
