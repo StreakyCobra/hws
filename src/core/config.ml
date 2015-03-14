@@ -18,3 +18,4 @@
 let colored = ref true
 let verbose = ref false
 let powerline = ref false
+let utf8 = ref false
