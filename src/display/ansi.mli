@@ -85,12 +85,23 @@ val on_hi_white   : style
 val reline        : command list
 (** Sequence of commands to rewrite current line *)    
 
+val tty           : bool ref
+(** Boolean reference to change the TTY mode to true/false, what
+  * enables/disables colored output. *)
+
 val set_tty       : bool -> unit
 (** Helper to change the TTY mode to true/false, what enables/disables colored
   * output. *)
 
+val set_styles    : style list -> unit
+(** Helper to set the styles of what will be printed afterward. *)
+
 val reset_styles  : unit -> unit
 (** Helper to reset the terminal appearance to its default. *)
+
+val format        : style list -> string -> string
+(** Helper to print a text with the given list of styles applied before, and
+  * reseted after. *)
 
 val print         : style list -> string -> unit
 (** Helper to print a text with the given list of styles applied before, and
@@ -99,9 +110,6 @@ val print         : style list -> string -> unit
 val print_nl      : style list -> string -> unit
 (** Helper to print a text with the given list of styles applied before, and
   * reseted after. Append a newline at the end of the string. *)
-
-val set_styles    : style list -> unit
-(** Helper to set the styles of what will be printed afterward. *)
 
 val exec_cmds     : command list -> unit
 (** Helper to execute a given list of commands. *)

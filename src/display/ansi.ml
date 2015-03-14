@@ -163,6 +163,11 @@ let set_styles styles =
 let reset_styles () =
   set_styles [Reset]
 
+let format styles text =
+  let styles_code = if !tty then sgr styles else "" in
+  let reset_code = if !tty then sgr [Reset] else "" in
+  styles_code ^ text ^ reset_code
+  
 let print styles text =
   set_styles styles;
   printf "%s" text;
