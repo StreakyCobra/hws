@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with hws.  If not, see <http://www.gnu.org/licenses/>. *)
 
-open Command;;
 open Ansi;;
 
 let display_normal () =
@@ -35,13 +34,10 @@ let display_version () = match !Config.verbose with
   | false -> display_normal ()
   | true -> display_verbose ()
 
-module Cmd : Command =
-struct
-  let key = "version"
-  (* First space needed for help message alignment *)
-  let doc = " Display the version number"
-  let specs = []
-  let handle_anon_arg arg = raise @@ Arg.Bad ("'" ^ arg ^ "' argument not supported")
-  let handle_rest_arg arg = raise @@ Arg.Bad ("'" ^ arg ^ "' argument not supported")
-  let execute () = display_version ()
-end
+let key = "version"
+(* First space needed for help message alignment *)
+let doc = " Display the version number"
+let specs = []
+let handle_anon_arg arg = raise @@ Arg.Bad ("'" ^ arg ^ "' argument not supported")
+let handle_rest_arg arg = raise @@ Arg.Bad ("'" ^ arg ^ "' argument not supported")
+let execute () = display_version ()

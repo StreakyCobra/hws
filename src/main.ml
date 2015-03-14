@@ -17,38 +17,39 @@
 
 open Command;;
 
-(* Reference to the command passed as argument *)
+(* Reference to the selected command *)
 let cmd : command option ref = ref None
 
-(* Reference to the current specifications *)
+(* Reference to the current specifications list *)
 let specs = ref []
 
 (* The list of commands available *)
 let cmds_list : command list = [
-  (module Cmd_init.Cmd);
-  (module Cmd_status.Cmd);
-  (module Cmd_version.Cmd);
+  (module Cmd_init);
+  (module Cmd_status);
+  (module Cmd_version);
 ]
+
+(* Generate the specification of a command *)
+let cmd_to_specs (module Cmd : Command) =
+  (Ansi.format [Ansi.red] Cmd.key , Arg.Set (ref false), Cmd.doc)
 
 (* Construct the list of commands' specifications *)
 let cmds_specs () = List.map cmd_to_specs cmds_list
 
+(* Ensure one command is selected. If no command has been selected, use the
+   default one *)
+let ensure_cmd () = match !cmd with
+  | None -> cmd := Some (module Cmd_status)
+  | Some _ -> ()
+
 (* Handle the rest arguments, after the "--" *)
 let handle_rest_arg arg =
-  (* If there are rest arguments, set the command to Cmd_status if not already
-   * set *)
-  begin
-    match !cmd with
-    | None -> cmd := Some (module Cmd_status.Cmd)
-    | Some _ -> ()
-  end;
-  (* Give the argument to the selected command module*)
-  begin
-    match !cmd with
-    | None -> raise @@ Arg.Bad "Internal Error"
-    | Some (module Cmd) -> Cmd.handle_rest_arg arg
-  end
-  
+  ensure_cmd ();
+  match !cmd with
+  | None -> failwith "Internal Error"
+  | Some (module Cmd) -> Cmd.handle_rest_arg arg
+
 (* General specifications *)
 let general_specs () = [
   ("-v"        , Arg.Set Config.verbose  , " Enable verbose output");
@@ -74,8 +75,10 @@ let anon_arg arg = match !cmd with
   | Some (module Cmd) -> Cmd.handle_anon_arg arg
 
 (* Execute the selected command *)
-let run_cmd () = match !cmd with
-  | None -> Cmd_status.Cmd.execute ()
+let run_cmd () = 
+  ensure_cmd ();
+  match !cmd with
+  | None -> failwith "Internal Error"
   | Some (module Cmd) -> Cmd.execute ()
 
 (* Main function, run the application *)
@@ -93,4 +96,9 @@ let color_hack () =
   if List.exists (fun a -> a = "--nocolor") (Array.to_list Sys.argv) then Config.colored := false
 
 (* Execute the main function, except when launched from the toplevel *)
-let () = if not !Sys.interactive then begin color_hack (); main () end
+let () = if not !Sys.interactive then
+    begin
+      color_hack ();
+      try main () with
+      | Failure a -> prerr_endline @@ Ansi.format [Ansi.Bold; Ansi.red] "Error: " ^ a
+    end

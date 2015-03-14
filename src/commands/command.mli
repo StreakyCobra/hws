@@ -28,6 +28,3 @@ sig
 end
 
 type command = (module Command)
-
-val cmd_to_specs : command -> (Arg.key * Arg.spec * Arg.doc)
-(** Transform a command into its Arg specification. *)
