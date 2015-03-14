@@ -9,6 +9,8 @@
 (* Add directories *)
 #directory "_build/src" ;;
 #directory "_build/src/display" ;;
+#directory "_build/src/commands" ;;
+#directory "_build/src/core" ;;
 
 (* load all local packages *)
 #load "main.cma" ;;
