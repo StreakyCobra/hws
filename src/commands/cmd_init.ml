@@ -22,7 +22,7 @@ struct
   let key = "init"
   (* First space needed for help message alignment *)
   let doc = " Initialize the workspace"
-  let spec = []
-  let anon_arg _ = raise @@ Arg.Bad "Not supported"
+  let specs = []
+  let handle_anon_arg _ = raise @@ Arg.Bad "Not supported"
   let execute () = print_endline "Init command called"
 end

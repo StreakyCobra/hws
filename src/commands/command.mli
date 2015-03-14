@@ -19,9 +19,11 @@ module type Command =
 sig
   val key : string
   val doc : string
-  val spec : (Arg.key * Arg.spec * Arg.doc) list
-  val anon_arg : string -> unit
+  val specs : (Arg.key * Arg.spec * Arg.doc) list
+  val handle_anon_arg : string -> unit
   val execute : unit -> unit
 end
 
 type command = (module Command)
+
+val cmd_to_specs : command -> (Arg.key * Arg.spec * Arg.doc)

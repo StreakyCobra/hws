@@ -20,47 +20,55 @@ open Command;;
 (* Reference to the command passed as argument *)
 let cmd : command option ref = ref None
 
-(* Transform a command into a Arg.spec definition *)
-let cmd_to_spec (module Cmd : Command) =
-  (Cmd.key, Arg.Set (ref false), Cmd.doc)
+(* Reference to the current specifications *)
+let specs = ref []
 
 (* The list of commands available *)
 let cmds_list : command list = [
   (module Cmd_init.Cmd);
   (module Cmd_status.Cmd);
+  (module Cmd_version.Cmd);
 ]
 
 (* Construct the list of commands' specifications *)
-let cmds_spec = Arg.align @@ List.map cmd_to_spec cmds_list
+let cmds_specs () = List.map cmd_to_specs cmds_list
 
-(* Reference to the current arguments spec *)
-let spec = ref cmds_spec
+(* General specifications *)
+let general_specs () = [
+  ("--nocolor", Arg.Clear Ansi.tty, " Disable colored output");
+]
+
+(* Select a command from the string argument given *)
+let select_cmd arg =
+  let rec find_cmd cmds : command = match cmds with
+    | [] -> raise @@ Arg.Bad ("'" ^ arg ^ "' is not a recognized subcommand")
+    | (module Cmd : Command) :: xs -> if arg = Cmd.key then (module Cmd) else find_cmd xs in
+  let (module Cmd) = find_cmd cmds_list in
+  cmd := Some (module Cmd);
+  specs := Arg.align @@ Cmd.specs @ general_specs ()
 
 (* Change the context regarding to the command *)
-let switch_cmd arg = 
-  if !Arg.current = 1 then
-    begin
-      let rec find_cmd cmds : command = match cmds with
-        | [] -> raise @@ Arg.Bad (arg ^ " is not a recognized subcommand")
-        | (module Cmd : Command) :: xs -> if arg = Cmd.key then (module Cmd) else find_cmd xs in
-      let (module Cmd) = find_cmd cmds_list in
-      cmd := Some (module Cmd);
-      spec := Arg.align @@ Cmd.spec;
-    end
-  else match !cmd with
-  | Some (module Cmd) -> Cmd.anon_arg arg
-  | None -> raise @@ Arg.Bad (arg ^ " is not a recognized parameters")
+let switch_specs arg = match !cmd with
+  | None -> select_cmd arg
+  | Some (module Cmd) -> Cmd.handle_anon_arg arg
 
 (* Execute the selected command *)
 let run_cmd () = match !cmd with
+  | None -> prerr_endline "No command specified"; exit 1
   | Some (module Cmd) -> Cmd.execute ()
-  | None -> raise @@ Arg.Bad "Internal Error"
 
 (* Main function, run the application *)
 let main () =
-  let description = "hws, A workspace manager for hackers." in
-  Arg.parse_dynamic spec switch_cmd description;
+  let description = Ansi.format [Ansi.blue] Version.description in
+  specs := Arg.align @@ cmds_specs () @ general_specs ();
+  Arg.parse_dynamic specs switch_specs description;
   run_cmd ()
 
 (* Execute the main function, except when launched from the toplevel *)
-let () = if not !Sys.interactive then main ()
+let () = if not !Sys.interactive then
+    begin
+      (* Horrible hack to disable colors soon enough if "--nocolor" flag is
+       * given, otherwise help message is still shown in color. *)
+      if List.exists (fun a -> a = "--nocolor") (Array.to_list Sys.argv) then Ansi.set_tty false;
+      main ()
+    end

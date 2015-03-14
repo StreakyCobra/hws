@@ -24,7 +24,7 @@ struct
   let key = "status"
   (* First space needed for help message alignment *)
   let doc = " Show the workspace status"
-  let spec = []
-  let anon_arg arg = lst := !lst @ [arg]
+  let specs = []
+  let handle_anon_arg arg = lst := !lst @ [arg]
   let execute () = print_string (String.concat " " !lst); print_endline ""
 end
