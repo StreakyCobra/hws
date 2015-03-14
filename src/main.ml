@@ -51,6 +51,7 @@ let handle_rest_arg arg =
   
 (* General specifications *)
 let general_specs () = [
+  ("-v", Arg.Set Config.verbose, " Enable verbose output");
   ("--", Arg.Rest handle_rest_arg, " Rest of arguments");
   ("--nocolor", Arg.Clear Ansi.tty, " Disable colored output");
 ]
@@ -76,16 +77,17 @@ let run_cmd () = match !cmd with
 
 (* Main function, run the application *)
 let main () =
+  let project = Ansi.format [Ansi.blue; Ansi.Bold] Version.project in
   let description = Ansi.format [Ansi.blue] Version.description in
+  let summary = project ^ ", " ^ description in
   specs := Arg.align @@ cmds_specs () @ general_specs ();
-  Arg.parse_dynamic specs switch_specs description;
+  Arg.parse_dynamic specs switch_specs summary;
   run_cmd ()
 
+(* Hack to disable colors soon enough if "--nocolor" flag is given, otherwise
+ * help message is always shown in color. *)
+let color_hack () =
+  if List.exists (fun a -> a = "--nocolor") (Array.to_list Sys.argv) then Ansi.set_tty false
+
 (* Execute the main function, except when launched from the toplevel *)
-let () = if not !Sys.interactive then
-    begin
-      (* Horrible hack to disable colors soon enough if "--nocolor" flag is
-       * given, otherwise help message is still shown in color. *)
-      if List.exists (fun a -> a = "--nocolor") (Array.to_list Sys.argv) then Ansi.set_tty false;
-      main ()
-    end
+let () = if not !Sys.interactive then begin color_hack (); main () end
