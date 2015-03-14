@@ -20,5 +20,7 @@ _build/
 setup.data
 setup.log
 
-# Generated files
+# Manually generated files
+.ocamlinit
+hws.odocl
 src/version.ml*

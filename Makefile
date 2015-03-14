@@ -97,6 +97,8 @@ top: debug .ocamlinit
 
 clean:
 	$(OCB) -clean
+	$(RM) .ocamlinit
+	$(RM) hws.odocl
 	$(RM) $(VERSION_FILE)*
 
 # Dynamically generated files liting Ocaml modules
