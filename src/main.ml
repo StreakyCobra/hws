@@ -33,8 +33,25 @@ let cmds_list : command list = [
 (* Construct the list of commands' specifications *)
 let cmds_specs () = List.map cmd_to_specs cmds_list
 
+(* Handle the rest arguments, after the "--" *)
+let handle_rest_arg arg =
+  (* If there are rest arguments, set the command to Cmd_status if not already
+   * set *)
+  begin
+    match !cmd with
+    | None -> cmd := Some (module Cmd_status.Cmd)
+    | Some _ -> ()
+  end;
+  (* Give the argument to the selected command module*)
+  begin
+    match !cmd with
+    | None -> raise @@ Arg.Bad "Internal Error"
+    | Some (module Cmd) -> Cmd.handle_rest_arg arg
+  end
+  
 (* General specifications *)
 let general_specs () = [
+  ("--", Arg.Rest handle_rest_arg, " Rest of arguments");
   ("--nocolor", Arg.Clear Ansi.tty, " Disable colored output");
 ]
 
@@ -54,7 +71,7 @@ let switch_specs arg = match !cmd with
 
 (* Execute the selected command *)
 let run_cmd () = match !cmd with
-  | None -> prerr_endline "No command specified"; exit 1
+  | None -> Cmd_status.Cmd.execute ()
   | Some (module Cmd) -> Cmd.execute ()
 
 (* Main function, run the application *)
