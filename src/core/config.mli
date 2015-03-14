@@ -26,3 +26,7 @@ val verbose : bool ref
 val powerline : bool ref
 (** Boolean reference to enable/disable use of powerline glyphs. Disabled by
     default. *)
+
+val utf8 : bool ref
+(** Boolean reference to enable/disable use of utf8 symbols. Enabled by
+    default. *)

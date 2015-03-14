@@ -53,6 +53,7 @@ let handle_rest_arg arg =
 let general_specs () = [
   ("-v"        , Arg.Set Config.verbose  , " Enable verbose output");
   ("-p"        , Arg.Set Config.powerline, " Enable powerline glyph");
+  ("--noutf8"  , Arg.Clear Config.utf8   , " Disable utf8 symbols");
   ("--nocolor" , Arg.Clear Config.colored, " Disable colored output");
   ("--"        , Arg.Rest handle_rest_arg, " Rest of arguments");
 ]
