@@ -24,5 +24,7 @@ let test_blue test_ctxt = assert_equal (Foreground Blue) (blue)
 
 (* Name the test cases and group them together *)
 let all =
-  ["Test Red">:: test_red;
-   "Test Blue">:: test_blue]
+  "Ansi test" >::: [
+    "Test Red">:: test_red;
+    "Test Blue">:: test_blue;
+  ]

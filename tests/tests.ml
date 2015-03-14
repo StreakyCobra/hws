@@ -18,11 +18,10 @@
 open OUnit2;;
 
 (* Name the test cases and group them together *)
-let suite =
-  "suite">::: Test_ansi.all
+let all = Test_ansi.all
 
 let main () =
-  run_test_tt_main suite;;
+  run_test_tt_main all;;
 
 (* Execute the main function, except when launched from the toplevel *)
 let () = if not !Sys.interactive then main ()
