@@ -27,8 +27,8 @@ let display_normal () =
 
 let display_verbose () =
   display_normal ();
-  print [] "Tag:     ";
-  print_nl [red] Version.tag
+  print [] "Name:    ";
+  print_nl [red] Version.name
     
 let display_version () = match !Config.verbose with
   | false -> display_normal ()

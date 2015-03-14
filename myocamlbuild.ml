@@ -6,7 +6,7 @@ let description = "A workspace manager for hackers."
 let major = 0
 let minor = 0
 let patch = 1
-let tag   = "Poetic panda"
+let name   = "Poetic panda"
 
 (* Generate src/version.ml in the plugin *)
 let version_ml = "src/version.ml"
@@ -20,7 +20,7 @@ let version_file_contents =
   Printf.bprintf buf "let major = %d;;\n" major ;
   Printf.bprintf buf "let minor = %d;;\n" minor ;
   Printf.bprintf buf "let patch = %d;;\n" patch ;
-  Printf.bprintf buf "let tag   = \"%s\";;\n" tag ;
+  Printf.bprintf buf "let name   = \"%s\";;\n" name ;
   Printf.bprintf buf "let str   = \"%d.%d.%d\";;\n" major minor patch;
   Buffer.contents buf
 
