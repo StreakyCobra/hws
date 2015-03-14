@@ -63,7 +63,7 @@ let select_cmd arg =
     | (module Cmd : Command) :: xs -> if arg = Cmd.key then (module Cmd) else find_cmd xs in
   let (module Cmd) = find_cmd cmds_list in
   cmd := Some (module Cmd);
-  specs := Arg.align @@ Cmd.specs @ general_specs ()
+  specs := Arg.align (Cmd.specs @ general_specs ())
 
 (* Change the context regarding to the command *)
 let switch_specs arg = match !cmd with

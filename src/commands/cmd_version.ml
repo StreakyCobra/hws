@@ -18,12 +18,11 @@
 open Command;;
 open Ansi;;
 
-let project = Ansi.format [Ansi.blue; Ansi.Bold] Version.project
-let description = Ansi.format [Ansi.blue] Version.description
-let summary = project ^ ", " ^ description
-
 let display_normal () =
-  print_nl [] summary;
+  let project = Ansi.format [Ansi.blue; Ansi.Bold] Version.project in
+  let description = Ansi.format [Ansi.blue] Version.description in
+  let summary = project ^ ", " ^ description in
+  print_nl [] @@ summary;
   print [] "Version: ";
   print_nl [Bold; red] Version.str
 
@@ -44,5 +43,5 @@ struct
   let specs = []
   let handle_anon_arg arg = raise @@ Arg.Bad ("'" ^ arg ^ "' argument not supported")
   let handle_rest_arg arg = raise @@ Arg.Bad ("'" ^ arg ^ "' argument not supported")
-  let execute = display_version
+  let execute () = display_version ()
 end
