@@ -153,19 +153,17 @@ let rec ansi cmds =
 (* TTY handling *)
 let tty = ref @@ Unix.isatty Unix.stdout
 
-let set_tty v = tty := v
-
 (* Printing helpers *)
 let set_styles styles =
-  let esc_code = if !tty then sgr styles else "" in
+  let esc_code = if !Config.colored && !tty then sgr styles else "" in
   printf "%s" esc_code
 
 let reset_styles () =
   set_styles [Reset]
 
 let format styles text =
-  let styles_code = if !tty then sgr styles else "" in
-  let reset_code = if !tty then sgr [Reset] else "" in
+  let styles_code = if !Config.colored && !tty then sgr styles else "" in
+  let reset_code = if !Config.colored && !tty then sgr [Reset] else "" in
   styles_code ^ text ^ reset_code
   
 let print styles text =
@@ -177,5 +175,5 @@ let print_nl styles text =
   print styles @@ text ^ nl
 
 let exec_cmds cmds =
-  let esc_code = if !tty then ansi cmds else "" in
+  let esc_code = if !Config.colored && !tty then ansi cmds else "" in
   printf "%s" esc_code

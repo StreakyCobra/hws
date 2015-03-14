@@ -51,9 +51,10 @@ let handle_rest_arg arg =
   
 (* General specifications *)
 let general_specs () = [
-  ("-v", Arg.Set Config.verbose, " Enable verbose output");
-  ("--", Arg.Rest handle_rest_arg, " Rest of arguments");
-  ("--nocolor", Arg.Clear Ansi.tty, " Disable colored output");
+  ("-v"        , Arg.Set Config.verbose  , " Enable verbose output");
+  ("-p"        , Arg.Set Config.powerline, " Enable powerline glyph");
+  ("--nocolor" , Arg.Clear Config.colored, " Disable colored output");
+  ("--"        , Arg.Rest handle_rest_arg, " Rest of arguments");
 ]
 
 (* Select a command from the string argument given *)
@@ -87,7 +88,7 @@ let main () =
 (* Hack to disable colors soon enough if "--nocolor" flag is given, otherwise
  * help message is always shown in color. *)
 let color_hack () =
-  if List.exists (fun a -> a = "--nocolor") (Array.to_list Sys.argv) then Ansi.set_tty false
+  if List.exists (fun a -> a = "--nocolor") (Array.to_list Sys.argv) then Config.colored := false
 
 (* Execute the main function, except when launched from the toplevel *)
 let () = if not !Sys.interactive then begin color_hack (); main () end

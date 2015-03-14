@@ -89,10 +89,6 @@ val tty           : bool ref
 (** Boolean reference to change the TTY mode to true/false, what
   * enables/disables colored output. *)
 
-val set_tty       : bool -> unit
-(** Helper to change the TTY mode to true/false, what enables/disables colored
-  * output. *)
-
 val set_styles    : style list -> unit
 (** Helper to set the styles of what will be printed afterward. *)
 
