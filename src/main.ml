@@ -25,22 +25,20 @@ let specs = ref []
 
 (* The list of commands available *)
 let cmds_list : command list = [
-  (module Cmd_init);
-  (module Cmd_status);
-  (module Cmd_version);
+  (module Command.Make(Cmd_init));
+  (module Command.Make(Cmd_status));
+  (module Command.Make(Cmd_version));
 ]
 
-(* Generate the specification of a command *)
-let cmd_to_specs (module Cmd : Command) =
-  (Ansi.format [Ansi.red] Cmd.key , Arg.Set (ref false), Cmd.doc)
-
 (* Construct the list of commands' specifications *)
-let cmds_specs () = List.map cmd_to_specs cmds_list
+let cmds_specs () =
+  let get_spec (module Cmd : Command) = Cmd.to_spec in
+  List.map get_spec cmds_list
 
 (* Ensure one command is selected. If no command has been selected, use the
    default one *)
 let ensure_cmd () = match !cmd with
-  | None -> cmd := Some (module Cmd_status)
+  | None -> cmd := Some (module Command.Make(Cmd_status))
   | Some _ -> ()
 
 (* Handle the rest arguments, after the "--" *)

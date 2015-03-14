@@ -38,6 +38,15 @@ sig
   val execute : unit -> unit
 end
 
-module Make : functor (Cmd : Command_internal) -> Command
+module Make (Cmd : Command_internal) : Command =
+struct
+  let key = Cmd.key
+  let doc = Cmd.doc
+  let specs = Cmd.specs
+  let handle_anon_arg = Cmd.handle_anon_arg
+  let handle_rest_arg = Cmd.handle_rest_arg
+  let execute () = Cmd.execute ()
+  let to_spec = (Cmd.key, Arg.Set (ref false), Cmd.doc)
+end
 
 type command = (module Command)
