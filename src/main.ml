@@ -70,7 +70,7 @@ let select_cmd arg =
 
 (* Handle anonymous arguments. If a command is already selected, give it the
 argument. Otherwise use this argument to select the subcommand. *)
-let anon_arg arg = match !cmd with
+let handle_anon_arg arg = match !cmd with
   | None -> select_cmd arg
   | Some (module Cmd) -> Cmd.handle_anon_arg arg
 
@@ -87,7 +87,7 @@ let main () =
   let description = Ansi.format [Ansi.blue] Version.description in
   let summary = project ^ ", " ^ description in
   specs := Arg.align @@ cmds_specs () @ general_specs ();
-  Arg.parse_dynamic specs anon_arg summary;
+  Arg.parse_dynamic specs handle_anon_arg summary;
   run_cmd ()
 
 (* Hack to disable colors soon enough if "--nocolor" flag is given, otherwise
