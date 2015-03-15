@@ -17,45 +17,41 @@
 
 (** Command module for defining subcommand of the application. *)
 
-module type Command =
+module type Command_provider =
 sig
   val key : string
   (** The name of the command. *)
+
   val doc : string
   (** The description of the command. *)
+
   val specs : (Arg.key * Arg.spec * Arg.doc) list
   (** The specification of the command. *)
+
   val handle_anon_arg : string -> unit
   (** A function handling the anonymous arguments. *)
+
   val handle_rest_arg : string -> unit
   (** A function handling the rest arguments. *)
+
   val execute : unit -> unit
   (** Run the command. *)
+end
+(** The provider type module for defining the interface to use for modules
+    internally. *)
+      
+module type Command =
+sig
+  include Command_provider
+  (** Include Command_provider content. *)
+
   val to_spec : unit -> (Arg.key * Arg.spec * Arg.doc)
   (** Return the specification of the command. *)
 end
 (** The Command type module defining the interface to use for modules. *)
 
-module type Command_internal =
-sig
-  val key : string
-  (** The name of the command. *)
-  val doc : string
-  (** The description of the command. *)
-  val specs : (Arg.key * Arg.spec * Arg.doc) list
-  (** The specification of the command. *)
-  val handle_anon_arg : string -> unit
-  (** A function handling the anonymous arguments. *)
-  val handle_rest_arg : string -> unit
-  (** A function handling the rest arguments. *)
-  val execute : unit -> unit
-  (** Run the command. *)
-end
-(** The internal type module for defining the interface to use for modules
-    internally. *)
-      
-module Make : functor (Cmd : Command_internal) -> Command
-(** Construct a Command from its internal representation. *)
-
 type command = (module Command)
 (** Shortcut type for refering to Command modules. *)
+
+module Make : functor (Cmd : Command_provider) -> Command
+(** Construct a Command from its provider representation. *)

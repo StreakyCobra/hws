@@ -15,38 +15,26 @@
  * You should have received a copy of the GNU General Public License
  * along with hws.  If not, see <http://www.gnu.org/licenses/>. *)
 
-(** Define the Command module. *)
+module type Command_provider =
+sig
+  val key : string
+  val doc : string
+  val specs : (Arg.key * Arg.spec * Arg.doc) list
+  val handle_anon_arg : string -> unit
+  val handle_rest_arg : string -> unit
+  val execute : unit -> unit
+end
 
 module type Command =
 sig
-  val key : string
-  val doc : string
-  val specs : (Arg.key * Arg.spec * Arg.doc) list
-  val handle_anon_arg : string -> unit
-  val handle_rest_arg : string -> unit
-  val execute : unit -> unit
+  include Command_provider
   val to_spec : unit -> (Arg.key * Arg.spec * Arg.doc)
 end
 
-module type Command_internal =
-sig
-  val key : string
-  val doc : string
-  val specs : (Arg.key * Arg.spec * Arg.doc) list
-  val handle_anon_arg : string -> unit
-  val handle_rest_arg : string -> unit
-  val execute : unit -> unit
-end
+type command = (module Command)
 
-module Make (Cmd : Command_internal) : Command =
+module Make (Cmd : Command_provider) : Command =
 struct
-  let key = Cmd.key
-  let doc = Cmd.doc
-  let specs = Cmd.specs
-  let handle_anon_arg = Cmd.handle_anon_arg
-  let handle_rest_arg = Cmd.handle_rest_arg
-  let execute () = Cmd.execute ()
+  include Cmd
   let to_spec () = (Ansi.format [Ansi.red] Cmd.key, Arg.Set (ref false), Cmd.doc)
 end
-
-type command = (module Command)
