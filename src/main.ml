@@ -26,6 +26,7 @@ let specs = ref []
 (* The list of commands available *)
 let cmds_list : command list = [
   (module Command.Make(Cmd_init));
+  (module Command.Make(Cmd_debug));
   (module Command.Make(Cmd_status));
   (module Command.Make(Cmd_version));
 ]
@@ -88,7 +89,7 @@ let main () =
   let description = Ansi.format [Ansi.blue] Version.description in
   let summary = project ^ ", " ^ description in
   (* Read the configuration file *)
-  Config.read_config ();
+  Config.init ();
   (* Set the specifications array *)
   specs := Arg.align @@ cmds_specs () @ general_specs ();
   (* Parse arguments *)

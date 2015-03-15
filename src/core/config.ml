@@ -16,22 +16,29 @@
  * along with hws.  If not, see <http://www.gnu.org/licenses/>. *)
 
 (* Flags *)
-let colored = Ansi.enabled
-let powerline = ref false
-let utf8 = ref true
-let verbose = ref false
+let colored           = Ansi.enabled
+let powerline         = ref false
+let utf8              = ref true
+let verbose           = ref false
 
 (* Constants *)
-let config_folder = ".hws"
+let workspace_dirname = ".hws"
+let config_filename   = "config"
+let projects_filename = "projects"
+let ignore_filename   = "ignore"
 
 (* Paths *)
-let original_dir = Sys.getcwd ()
-let workspace_root = Workspace.workspace_root config_folder
-let workspace_dir = Filename.concat workspace_root config_folder
+let original_dir      = ref ""
+let workspace_root    = ref ""
+let workspace_dir     = ref ""
+let config_file       = ref ""
+let projects_file     = ref ""
+let ignore_file       = ref ""
 
-(* Caches *)
+(* Caching *)
 let symbols_cache : Symbols.symbols option ref = ref None
 
+(* Select encoding according to flags *)
 let encoding () : Symbols.encoding =
   if !powerline then
     (module Symbols.Powerline)
@@ -53,4 +60,17 @@ let symbols () : Symbols.symbols = match !symbols_cache with
     end
   | Some s -> s (* Module existing, use it *)
 
+let prepare_paths () =
+  original_dir   := Sys.getcwd ();
+  workspace_root := Workspace.workspace_root workspace_dirname;
+  workspace_dir  := Filename.concat !workspace_root workspace_dirname;
+  let config_relative filename = Filename.concat !workspace_dir filename in
+  config_file    := config_relative config_filename;
+  projects_file  := config_relative projects_filename;
+  ignore_file    := config_relative ignore_filename
+
 let read_config () = ()
+
+let init () =
+  prepare_paths ();
+  read_config ()

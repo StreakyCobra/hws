@@ -26,7 +26,4 @@ let handle_anon_arg arg = raise @@ Arg.Bad ("'" ^ arg ^ "' argument not supporte
 
 let handle_rest_arg arg = raise @@ Arg.Bad ("'" ^ arg ^ "' argument not supported")
 
-let execute () =
-  print_endline Config.original_dir;
-  print_endline Config.workspace_root;
-  print_endline Config.workspace_dir
+let execute () = print_endline "Status command called"
