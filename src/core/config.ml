@@ -15,12 +15,21 @@
  * You should have received a copy of the GNU General Public License
  * along with hws.  If not, see <http://www.gnu.org/licenses/>. *)
 
+(* Flags *)
 let colored = Ansi.enabled
 let powerline = ref false
 let utf8 = ref true
 let verbose = ref false
 
-(* Caching modules *)
+(* Constants *)
+let config_folder = ".hws"
+
+(* Paths *)
+let original_dir = Sys.getcwd ()
+let workspace_root = Workspace.workspace_root config_folder
+let workspace_dir = Filename.concat workspace_root config_folder
+
+(* Caches *)
 let symbols_cache : Symbols.symbols option ref = ref None
 
 let encoding () : Symbols.encoding =

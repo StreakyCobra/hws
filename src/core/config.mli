@@ -31,6 +31,18 @@ val utf8 : bool ref
 (** Boolean reference to enable/disable use of utf8 symbols. Enabled by
     default. *)
 
+val config_folder : string
+(** The name of the configuration folder in the hws workspace. *)
+
+val original_dir : string
+(** The path to original directory where the program was launched. *)
+
+val workspace_root : string
+(** The path to workspace root. *)
+
+val workspace_dir : string
+(** The path to workspace directory. *)
+
 val symbols : unit -> Symbols.symbols
 (** Return the current Symbols module by looking at utf8 and powerline flags. *)
 
