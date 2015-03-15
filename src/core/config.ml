@@ -16,6 +16,15 @@
  * along with hws.  If not, see <http://www.gnu.org/licenses/>. *)
 
 let colored = ref true
-let verbose = ref false
 let powerline = ref false
-let utf8 = ref false
+let utf8 = ref true
+let verbose = ref false
+
+let encoding () : Symbols.encoding =
+  if !powerline then (module Symbols.Powerline) else
+  if !utf8 then (module Symbols.Utf8) else
+  (module Symbols.Ascii)
+
+let symbols () : Symbols.symbols =
+  let (module E) : Symbols.encoding = encoding () in
+  (module Symbols.Symbols(E))

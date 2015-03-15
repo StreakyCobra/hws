@@ -26,4 +26,7 @@ let handle_anon_arg arg = raise @@ Arg.Bad ("'" ^ arg ^ "' argument not supporte
 
 let handle_rest_arg arg = raise @@ Arg.Bad ("'" ^ arg ^ "' argument not supported")
 
-let execute () = print_endline "Init command called"
+let execute () =
+  let (module S) = Config.symbols () in
+  print_endline S.branch;
+  print_endline S.glider

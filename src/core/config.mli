@@ -30,3 +30,6 @@ val powerline : bool ref
 val utf8 : bool ref
 (** Boolean reference to enable/disable use of utf8 symbols. Enabled by
     default. *)
+
+val symbols : unit -> Symbols.symbols
+(** Return the current Symbols module by looking at utf8 and powerline flags. *)
