@@ -34,11 +34,13 @@ module Powerline : Encoding
 
 module type Symbols =
 sig
-  val glider : string
-  (** Glider symbol *)
-
-  val branch : string
-  (** Branch symbol *)
+  val glider :string
+  val branch :string
+  val line :string
+  val hold :string
+  val right_plain :string
+  val right :string
+  val left_plain :string
 end
 (** The Symbols module providing different glyphs and symbols. *)
 
