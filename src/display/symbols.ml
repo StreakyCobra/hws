@@ -45,7 +45,7 @@ end
 
 type symbols = (module Symbols)
 
-module Symbols (E : Encoding) : Symbols =
+module Make (E : Encoding) : Symbols =
 struct
   let glider = Default.glider E.t
   let branch = Default.branch E.t
