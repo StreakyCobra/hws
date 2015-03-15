@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with hws.  If not, see <http://www.gnu.org/licenses/>. *)
 
-let colored = ref true
+let colored = Ansi.enabled
 let powerline = ref false
 let utf8 = ref true
 let verbose = ref false
@@ -44,5 +44,4 @@ let symbols () : Symbols.symbols = match !symbols_cache with
     end
   | Some s -> s (* Module existing, use it *)
 
-let read_config () =
-  colored := false
+let read_config () = ()
