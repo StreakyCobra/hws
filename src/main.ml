@@ -106,5 +106,5 @@ let () = if not !Sys.interactive then
     begin
       color_hack ();
       try main () with
-      | Failure a -> failwith @@ Ansi.format [Ansi.Bold; Ansi.red] "Error: " ^ a
+      | Failure a -> prerr_endline @@ Ansi.format [Ansi.Bold; Ansi.red] "Error: " ^ a
     end
