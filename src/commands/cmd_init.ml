@@ -16,9 +16,14 @@
  * along with hws.  If not, see <http://www.gnu.org/licenses/>. *)
 
 let key = "init"
+
 (* First space needed for help message alignment *)
 let doc = " Initialize the workspace"
+
 let specs = []
+
 let handle_anon_arg arg = raise @@ Arg.Bad ("'" ^ arg ^ "' argument not supported")
+
 let handle_rest_arg arg = raise @@ Arg.Bad ("'" ^ arg ^ "' argument not supported")
+
 let execute () = print_endline "Init command called"

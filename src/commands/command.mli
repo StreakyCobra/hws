@@ -20,24 +20,37 @@
 module type Command =
 sig
   val key : string
+  (** The name of the command. *)
   val doc : string
+  (** The description of the command. *)
   val specs : (Arg.key * Arg.spec * Arg.doc) list
+  (** The specification of the command. *)
   val handle_anon_arg : string -> unit
+  (** A function handling the anonymous arguments. *)
   val handle_rest_arg : string -> unit
+  (** A function handling the rest arguments. *)
   val execute : unit -> unit
+  (** Run the command. *)
   val to_spec : unit -> (Arg.key * Arg.spec * Arg.doc)
+  (** Return the specification of the command. *)
 end
 
 module type Command_internal =
 sig
   val key : string
+  (** The name of the command. *)
   val doc : string
+  (** The description of the command. *)
   val specs : (Arg.key * Arg.spec * Arg.doc) list
+  (** The specification of the command. *)
   val handle_anon_arg : string -> unit
+  (** A function handling the anonymous arguments. *)
   val handle_rest_arg : string -> unit
+  (** A function handling the rest arguments. *)
   val execute : unit -> unit
+  (** Run the command. *)
 end
-
+      
 module Make : functor (Cmd : Command_internal) -> Command
 
 type command = (module Command)

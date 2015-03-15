@@ -35,9 +35,14 @@ let display_version () = match !Config.verbose with
   | true -> display_verbose ()
 
 let key = "version"
+
 (* First space needed for help message alignment *)
 let doc = " Display the version number"
+
 let specs = []
+
 let handle_anon_arg arg = raise @@ Arg.Bad ("'" ^ arg ^ "' argument not supported")
+
 let handle_rest_arg arg = raise @@ Arg.Bad ("'" ^ arg ^ "' argument not supported")
+
 let execute () = display_version ()
