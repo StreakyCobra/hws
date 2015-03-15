@@ -32,7 +32,7 @@ let cmds_list : command list = [
 
 (* Construct the list of commands' specifications *)
 let cmds_specs () =
-  let get_spec (module Cmd : Command) = Cmd.to_spec in
+  let get_spec (module Cmd : Command) = Cmd.to_spec () in
   List.map get_spec cmds_list
 
 (* Ensure one command is selected. If no command has been selected, use the
@@ -50,11 +50,11 @@ let handle_rest_arg arg =
 
 (* General specifications *)
 let general_specs () = [
-  ("-v"        , Arg.Set Config.verbose  , " Enable verbose output");
-  ("-p"        , Arg.Set Config.powerline, " Enable powerline glyph");
-  ("--noutf8"  , Arg.Clear Config.utf8   , " Disable utf8 symbols");
-  ("--nocolor" , Arg.Clear Config.colored, " Disable colored output");
-  ("--"        , Arg.Rest handle_rest_arg, " Rest of arguments");
+  ("-v"        , Arg.Set Config.verbose   , " Enable verbose output");
+  ("-p"        , Arg.Set Config.powerline , " Enable powerline glyph");
+  ("--noutf8"  , Arg.Clear Config.utf8    , " Disable utf8 symbols");
+  ("--nocolor" , Arg.Clear Config.colored , " Disable colored output");
+  ("--"        , Arg.Rest handle_rest_arg , " Rest of arguments");
 ]
 
 (* Select a command from the string argument given *)

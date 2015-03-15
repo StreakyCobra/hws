@@ -25,7 +25,7 @@ sig
   val handle_anon_arg : string -> unit
   val handle_rest_arg : string -> unit
   val execute : unit -> unit
-  val to_spec : (Arg.key * Arg.spec * Arg.doc)
+  val to_spec : unit -> (Arg.key * Arg.spec * Arg.doc)
 end
 
 module type Command_internal =
@@ -46,7 +46,7 @@ struct
   let handle_anon_arg = Cmd.handle_anon_arg
   let handle_rest_arg = Cmd.handle_rest_arg
   let execute () = Cmd.execute ()
-  let to_spec = (Cmd.key, Arg.Set (ref false), Cmd.doc)
+  let to_spec () = (Ansi.format [Ansi.red] Cmd.key, Arg.Set (ref false), Cmd.doc)
 end
 
 type command = (module Command)

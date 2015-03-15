@@ -25,7 +25,7 @@ sig
   val handle_anon_arg : string -> unit
   val handle_rest_arg : string -> unit
   val execute : unit -> unit
-  val to_spec : (Arg.key * Arg.spec * Arg.doc)
+  val to_spec : unit -> (Arg.key * Arg.spec * Arg.doc)
 end
 
 module type Command_internal =
