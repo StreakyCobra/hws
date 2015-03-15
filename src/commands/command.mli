@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with hws.  If not, see <http://www.gnu.org/licenses/>. *)
 
-(** Define the Command module. *)
+(** Command module for defining subcommand of the application. *)
 
 module type Command =
 sig
@@ -34,6 +34,7 @@ sig
   val to_spec : unit -> (Arg.key * Arg.spec * Arg.doc)
   (** Return the specification of the command. *)
 end
+(** The Command type module defining the interface to use for modules. *)
 
 module type Command_internal =
 sig
@@ -50,7 +51,11 @@ sig
   val execute : unit -> unit
   (** Run the command. *)
 end
+(** The internal type module for defining the interface to use for modules
+    internally. *)
       
 module Make : functor (Cmd : Command_internal) -> Command
+(** Construct a Command from its internal representation. *)
 
 type command = (module Command)
+(** Shortcut type for refering to Command modules. *)

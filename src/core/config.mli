@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with hws.  If not, see <http://www.gnu.org/licenses/>. *)
 
-(** Configuration manager *)
+(** The configuration manager of the application. *)
 
 val colored : bool ref
 (** Boolean reference to enable/disable colored output. Enabled by default. *)
