@@ -20,6 +20,9 @@ let powerline = ref false
 let utf8 = ref true
 let verbose = ref false
 
+(* Caching modules *)
+let symbols_cache : Symbols.symbols option ref = ref None
+
 let encoding () : Symbols.encoding =
   if !powerline then
     (module Symbols.Powerline)
@@ -28,9 +31,18 @@ let encoding () : Symbols.encoding =
   else
     (module Symbols.Ascii)
 
-let symbols () : Symbols.symbols =
-  let (module E) : Symbols.encoding = encoding () in
-  (module Symbols.Make(E))
+let symbols () : Symbols.symbols = match !symbols_cache with
+  | None -> (* Module not created, create and cache it *)
+    begin
+      (* Load module *)
+      let (module E) : Symbols.encoding = encoding () in
+      let (module S) : Symbols.symbols = (module Symbols.Make(E)) in
+      (* Cache it *)
+      symbols_cache := Some (module S);
+      (* Return it *)
+      (module S)
+    end
+  | Some s -> s (* Module existing, use it *)
 
 let read_config () =
   colored := false
