@@ -41,14 +41,16 @@ let ensure_cmd () = match !cmd with
   | None -> cmd := Some (module Command.Make(Cmd_status))
   | Some _ -> ()
 
-(* Handle the rest arguments, after the "--" *)
+(* Handle the rest arguments, after the "--". Ensure the default subcommand is
+   selected if none. *)
 let handle_rest_arg arg =
   ensure_cmd ();
   match !cmd with
-  | None -> failwith "Internal Error"
+  | None -> failwith "Internal Error" (* Must never happen due to the 'ensure_cmd' *)
   | Some (module Cmd) -> Cmd.handle_rest_arg arg
 
-(* General specifications *)
+(* General specifications. Description MUST contains a space at beginning for
+   correct alignment. *)
 let general_specs () = [
   ("-v"        , Arg.Set Config.verbose   , " Enable verbose output");
   ("-p"        , Arg.Set Config.powerline , " Enable powerline glyph. Implies utf8 enabled.");
@@ -72,11 +74,12 @@ let handle_anon_arg arg = match !cmd with
   | None -> select_cmd arg
   | Some (module Cmd) -> Cmd.handle_anon_arg arg
 
-(* Execute the selected command *)
+(* Execute the selected command. Ensure the default subcommand is selected if
+   none. *)
 let run_cmd () = 
   ensure_cmd ();
   match !cmd with
-  | None -> failwith "Internal Error"
+  | None -> failwith "Internal Error" (* Must never happen due to the 'ensure_cmd' *)
   | Some (module Cmd) -> Cmd.execute ()
 
 (* Main function, run the application *)
@@ -84,9 +87,13 @@ let main () =
   let project = Ansi.format [Ansi.blue; Ansi.Bold] Version.project in
   let description = Ansi.format [Ansi.blue] Version.description in
   let summary = project ^ ", " ^ description in
-  specs := Arg.align @@ cmds_specs () @ general_specs ();
+  (* Read the configuration file *)
   Config.read_config ();
+  (* Set the specifications array *)
+  specs := Arg.align @@ cmds_specs () @ general_specs ();
+  (* Parse arguments *)
   Arg.parse_dynamic specs handle_anon_arg summary;
+  (* Run the subcommand *)
   run_cmd ()
 
 (* Hack to disable colors soon enough if "--nocolor" flag is given, otherwise
@@ -99,5 +106,5 @@ let () = if not !Sys.interactive then
     begin
       color_hack ();
       try main () with
-      | Failure a -> prerr_endline @@ Ansi.format [Ansi.Bold; Ansi.red] "Error: " ^ a
+      | Failure a -> failwith @@ Ansi.format [Ansi.Bold; Ansi.red] "Error: " ^ a
     end
