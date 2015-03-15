@@ -34,15 +34,15 @@ module Default =
 struct
   let rec glider = function
     | None             -> ""
-    | Ascii            -> "..:"
+    | Ascii            -> ""
     | Utf8 | Powerline -> "⠠⠵"
   let rec branch = function
     | None             -> ""
-    | Ascii | Utf8     -> "Y"
+    | Ascii | Utf8     -> ""
     | Powerline        -> ""
   let rec line = function
     | None             -> ""
-    | Ascii | Utf8     -> "L"
+    | Ascii | Utf8     -> ""
     | Powerline        -> ""
   let rec hold = function
     | None             -> ""
@@ -50,11 +50,11 @@ struct
     | Powerline        -> ""
   let rec right_plain = function
     | None             -> ""
-    | Ascii | Utf8     -> ">"
+    | Ascii | Utf8     -> ":"
     | Powerline        -> ""
   let rec right = function
     | None             -> ""
-    | Ascii | Utf8     -> ">"
+    | Ascii | Utf8     -> ":"
     | Powerline        -> ""
   let rec left_plain = function
     | None             -> ""
