@@ -8,7 +8,7 @@ ifeq (run,$(firstword $(MAKECMDGOALS)))
   RUN_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
   # ...and turn them into do-nothing targets
   $(eval $(RUN_ARGS):;@:)
-endif# ocamlbuild variables
+endif
 
 # ocamlbuild related 
 OCBFLAGS := -classic-display
