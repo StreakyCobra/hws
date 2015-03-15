@@ -42,6 +42,9 @@ sig
 end
 (** The Symbols module providing different glyphs and symbols. *)
 
+type symbols = (module Symbols)
+(** Shortcut type for Symbols modules *)
+
 module Make :
   functor (E : Encoding) ->
   sig
@@ -49,6 +52,3 @@ module Make :
     val branch : string
   end
 (** Functor defining the Symbols module from an Encoding. *)
-
-type symbols = (module Symbols)
-(** Shortcut type for Symbols modules *)
