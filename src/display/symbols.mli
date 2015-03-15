@@ -18,7 +18,7 @@
 (** Symbols provider for different encodings .*)
 
 module type Encoding
-(** The possible types of encoding. *)
+(** The module type providing an encoding. *)
 
 type encoding = (module Encoding)
 (** Shortcut type for Encoding modules *)
@@ -45,10 +45,5 @@ end
 type symbols = (module Symbols)
 (** Shortcut type for Symbols modules *)
 
-module Make :
-  functor (E : Encoding) ->
-  sig
-    val glider : string
-    val branch : string
-  end
+module Make : functor (E : Encoding) -> Symbols
 (** Functor defining the Symbols module from an Encoding. *)
