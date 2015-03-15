@@ -32,45 +32,55 @@ module Powerline : Encoding = struct let t = Powerline end
 
 module Default =
 struct
-  let rec glider = function
+  let glider = function
     | None             -> ""
     | Ascii            -> ""
     | Utf8 | Powerline -> "⠠⠵"
-  let rec branch = function
+  let branch = function
     | None             -> ""
     | Ascii | Utf8     -> ""
     | Powerline        -> ""
-  let rec line = function
+  let line = function
     | None             -> ""
     | Ascii | Utf8     -> ""
     | Powerline        -> ""
-  let rec hold = function
+  let hold = function
     | None             -> ""
     | Ascii | Utf8     -> "H"
     | Powerline        -> ""
-  let rec right_plain = function
+  let right_plain = function
     | None             -> ""
     | Ascii | Utf8     -> ":"
     | Powerline        -> ""
-  let rec right = function
+  let right = function
     | None             -> ""
     | Ascii | Utf8     -> ":"
     | Powerline        -> ""
-  let rec left_plain = function
+  let left_plain = function
     | None             -> ""
     | Ascii | Utf8     -> "<"
     | Powerline        -> ""
+  let check = function
+    | None             -> ""
+    | Ascii            -> "[x]"
+    | Utf8 | Powerline -> "✔"
+  let nocheck = function
+    | None             -> ""
+    | Ascii            -> "[ ]"
+    | Utf8 | Powerline -> "✘"
 end
 
 module type Symbols =
 sig
-  val glider :string
-  val branch :string
-  val line :string
-  val hold :string
-  val right_plain :string
-  val right :string
-  val left_plain :string
+  val glider : string
+  val branch : string
+  val line : string
+  val hold : string
+  val right_plain : string
+  val right : string
+  val left_plain : string
+  val check : string
+  val nocheck : string
 end
 
 type symbols = (module Symbols)
@@ -84,4 +94,6 @@ struct
   let right_plain = Default.right_plain E.t
   let right = Default.right E.t
   let left_plain = Default.left_plain E.t
+  let check = Default.check E.t
+  let nocheck = Default.nocheck E.t
 end

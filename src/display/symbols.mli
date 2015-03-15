@@ -41,6 +41,8 @@ sig
   val right_plain :string
   val right :string
   val left_plain :string
+  val check :string
+  val nocheck :string
 end
 (** The Symbols module providing different glyphs and symbols. *)
 
