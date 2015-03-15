@@ -17,6 +17,15 @@
 
 open Printf;;
 
+(* Flage to enable or disable Ansi rendering *)
+let enabled = ref true
+
+(* TTY handling *)
+let tty = ref @@ Unix.isatty Unix.stdout
+
+(* Method checking if is_enabled must be enabled *)
+let is_enabled () = !tty && !enabled
+
 (* ANSI color type *)
 type color =
   | Black
@@ -150,20 +159,17 @@ let rec ansi cmds =
   | x::[] -> ansi_code x
   | x::xs -> ansi_code x ^ css ^ ansi xs
 
-(* TTY handling *)
-let tty = ref @@ Unix.isatty Unix.stdout
-
 (* Printing helpers *)
 let set_styles styles =
-  let esc_code = if !tty then sgr styles else "" in
+  let esc_code = if is_enabled () then sgr styles else "" in
   printf "%s" esc_code
 
 let reset_styles () =
   set_styles [Reset]
 
 let format styles text =
-  let styles_code = if !tty then sgr styles else "" in
-  let reset_code = if !tty then sgr [Reset] else "" in
+  let styles_code = if is_enabled () then sgr styles else "" in
+  let reset_code = if is_enabled () then sgr [Reset] else "" in
   styles_code ^ text ^ reset_code
   
 let print styles text =
@@ -175,5 +181,5 @@ let print_nl styles text =
   print styles @@ text ^ nl
 
 let exec_cmds cmds =
-  let esc_code = if !tty then ansi cmds else "" in
+  let esc_code = if is_enabled () then ansi cmds else "" in
   printf "%s" esc_code
