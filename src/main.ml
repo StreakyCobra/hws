@@ -85,6 +85,7 @@ let main () =
   let description = Ansi.format [Ansi.blue] Version.description in
   let summary = project ^ ", " ^ description in
   specs := Arg.align @@ cmds_specs () @ general_specs ();
+  Config.read_config ();
   Arg.parse_dynamic specs handle_anon_arg summary;
   run_cmd ()
 

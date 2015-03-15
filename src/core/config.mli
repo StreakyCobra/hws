@@ -33,3 +33,6 @@ val utf8 : bool ref
 
 val symbols : unit -> Symbols.symbols
 (** Return the current Symbols module by looking at utf8 and powerline flags. *)
+
+val read_config : unit -> unit
+(** Read and interpret the configuration file. *)
