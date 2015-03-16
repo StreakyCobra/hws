@@ -112,7 +112,7 @@ let print_listing dirname =
   let print_indent path =
     begin
       Ansi.print [Ansi.on_green] " ";
-      print_string @@ if Sys.is_directory (relative path) then " d " else " - ";
+      print_string @@ if Utils.is_directory (relative path) then " d " else " - ";
       print_endline path
     end in
   List.iter (print_indent) content;
