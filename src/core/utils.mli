@@ -18,9 +18,6 @@
 val ( <| ) : ('a -> 'b) -> ('c -> 'a) -> 'c -> 'b
 (** Infix function composition operator. *)
 
-val ( |> ) : 'a -> ('a -> 'b) -> 'b
-(** Infix reverse function application operator. *)
-
 val is_directory : string -> bool
 (** The Sys.is_directory function have a problem with symbolic links. Wrapper to
     ignore such errors. *)

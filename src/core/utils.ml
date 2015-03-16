@@ -17,7 +17,6 @@
 
 
 let ( <| ) f g x = f(g(x))
-let ( |> ) x f = f x
 
 let is_directory arg =
   (* Try first the Sys function *)
