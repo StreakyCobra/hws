@@ -18,6 +18,9 @@
 val ( <| ) : ('a -> 'b) -> ('c -> 'a) -> 'c -> 'b
 (** Infix function composition operator. *)
 
+val flip : ('a -> 'b -> 'c) -> 'b -> 'a -> 'c
+(** Flip arguments of the given function: f x y = f y x. *)
+
 val is_directory : string -> bool
 (** The Sys.is_directory function have a problem with symbolic links. Wrapper to
     ignore such errors. *)

@@ -18,6 +18,8 @@
 
 let ( <| ) f g x = f(g(x))
 
+let flip f x y = f y x
+
 let is_directory arg =
   (* Try first the Sys function *)
   try Sys.is_directory arg
