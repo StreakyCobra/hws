@@ -102,17 +102,17 @@ let print_content filename = if Sys.file_exists filename then
           Ansi.print [Ansi.on_green] " ";
           print_endline @@ " " ^ path
         end in
-      List.iter (print_indent) content;
+      List.iter print_indent content;
     end;
   print_endline ""
 
 let print_listing dirname =
-  let relative name = Filename.concat dirname name in
+  let relative = Filename.concat dirname in
   let content = Array.to_list @@ Sys.readdir dirname in
   let print_indent path =
     begin
       Ansi.print [Ansi.on_green] " ";
-      print_string @@ if Utils.is_directory (relative path) then " d " else " - ";
+      print_string @@ if Utils.is_directory @@ relative path then " d " else " - ";
       print_endline path
     end in
   List.iter (print_indent) content;
