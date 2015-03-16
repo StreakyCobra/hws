@@ -26,8 +26,4 @@ let handle_anon_arg arg = raise @@ Arg.Bad ("'" ^ arg ^ "' argument not supporte
 
 let handle_rest_arg arg = raise @@ Arg.Bad ("'" ^ arg ^ "' argument not supported")
 
-let execute () =
-  let (module S) = Config.symbols () in
-  Ansi.print [Ansi.black; Ansi.on_blue;] @@ "init";
-  Ansi.print [Ansi.blue;] S.right_plain;
-  Ansi.print_nl [] ""
+let execute () = print_endline "Init command called"
