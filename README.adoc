@@ -9,17 +9,18 @@ A workspace manager for hackers.
 Requirements
 ------------
 
-- +OCaml+ compiler, version +>4.01.0+
+- +ocaml+, version +> 4.01.0+
+- +ocaml-findlib+
 
 
 Contributing
 ------------
 
 Branching::
-This software follows the Vincent Driessen's http://nvie.com/posts/a-successful-git-branching-model/[git branching model].
+This software follows the Vincent Driessen's http://nvie.com/posts/a-successful-git-branching-model/[git branching model]. With an exception for the documentation, which is updated directly in the master branch.
 
 Pull requests::
-Sending patches by mail are prefered over Github's Pull Requests. If Pull Requests are sent through Github, the patches will be merged after review and rewording. Original author's name will be kept and commit will be signed-off.
+Sending patches by mail are prefered over Github's Pull Requests. If Pull Requests are sent through Github, the patches may be merged after review and rewording. Original author's name will be kept and commit will be signed-off. The author name will be added to the list of contributors.
 
 Commit messages::
 Git commit messages are better if they can follow Tim Pope's http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html[note].
@@ -28,15 +29,20 @@ Git commit messages are better if they can follow Tim Pope's http://tbaggery.com
 Versioning 
 ----------
 
-This software uses http://semver.org/spec/v2.0.0.html[semantic versioning v2.0.0]. Version numbers are of the form:
+This software will follow parts of http://semver.org/spec/v2.0.0.html[semantic versioning v2.0.0]. Version numbers are of the form:
 
 ----
 MAJOR.MINOR.PATCH
 ----
 
-- +MAJOR+ increases with *big changes* or with backwards-incompatible API changes.
+- +MAJOR+ increases with backwards-incompatible API changes.
 - +MINOR+ increases with functionality added in a backwards-compatible manner.
 - +PATCH+ increases with backwards-compatible bug fixes.
+
+Any number may also be incremented if it seems to be worth.
+
+[NOTE]
++MAJOR+ version +0+ is for initial development, do not expect any stability.
 
 
 License
@@ -60,3 +66,5 @@ You should have received a copy of the GNU General Public License along
 with this program; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 ....
+
+See the +COPYING+ file for the complete license.
