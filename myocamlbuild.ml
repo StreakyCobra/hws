@@ -4,8 +4,8 @@ open Ocamlbuild_plugin ;;
 let project = "hws"
 let description = "A workspace manager for hackers."
 let major = 0
-let minor = 0
-let patch = 1
+let minor = 1
+let patch = 0
 let name   = "Poetic panda"
 
 (* Generate src/version.ml in the plugin *)
