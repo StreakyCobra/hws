@@ -6,6 +6,12 @@ Fabien Dubosson <fabien.dubosson@gmail.com>
 A workspace manager for hackers.
 
 
+Requirements
+------------
+
+- +OCaml+ compiler, version +>4.01.0+
+
+
 Contributing
 ------------
 
