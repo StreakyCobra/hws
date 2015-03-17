@@ -1,7 +1,7 @@
 hws
 ===
 Fabien Dubosson <fabien.dubosson@gmail.com>
-0.0.1, 2015-03-05: Development started.
+0.1.0, 2015-03-05: Development started.
 
 A workspace manager for hackers.
 
