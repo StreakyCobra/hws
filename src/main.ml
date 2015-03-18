@@ -88,13 +88,13 @@ let main () =
   let project = Ansi.format [Ansi.blue; Ansi.Bold] Version.project in
   let description = Ansi.format [Ansi.blue] Version.description in
   let summary = project ^ ", " ^ description in
-  (* First read the configuration file, to be overwritten by CLI arguments *)
+  (* First read the configuration file *)
   Config.read_config ();
   (* Set the specifications array *)
   specs := Arg.align @@ cmds_specs () @ general_specs ();
-  (* Parse arguments *)
+  (* Parse arguments, overwrite the config setted by the config file *)
   Arg.parse_dynamic specs handle_anon_arg summary;
-  (* Prepare the configuration *)
+  (* Setup the configuration *)
   Config.init ();
   (* Run the subcommand *)
   run_cmd ()
