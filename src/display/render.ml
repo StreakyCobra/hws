@@ -15,6 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with hws.  If not, see <http://www.gnu.org/licenses/>. *)
 
+open Ansi;;
 open Display;;
 open Symbols;;
 
@@ -31,10 +32,6 @@ struct
   let display : display = (module D)
   let branch name =
     let (module S) : symbols = (module Symbols.Make (D)) in
-    match D.display_type with
-    | Powerline -> S.branch ^ name
-    | Utf8      -> S.branch ^ name
-    | Ascii     -> S.branch ^ name
-    | None      -> S.branch ^ name
+    format [red] S.branch ^ " " ^ (format [blue; Bold] name)
 end
 
