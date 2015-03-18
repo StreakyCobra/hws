@@ -21,7 +21,6 @@ open Symbols;;
 
 module type Render =
 sig
-  val display : display
   val indent : string -> string
   val branch : string -> string
 end
@@ -30,10 +29,12 @@ type render = (module Render)
 
 module Make (D : Display.Display) : Render =
 struct
-  let display : display = (module D)
+  let symbols : symbols = (module Symbols.Make (D))
+
   let indent = (^) "    "
+
   let branch name =
-    let (module S) : symbols = (module Symbols.Make (D)) in
+    let (module S) : symbols = symbols in
     indent @@ format [red] S.branch ^ " " ^ (format [blue; Bold] name)
 end
 

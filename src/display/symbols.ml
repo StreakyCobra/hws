@@ -19,7 +19,6 @@ open Display;;
 
 module type Symbols =
 sig
-  val display : display
   val glider : string
   val branch : string
   val line : string
@@ -35,40 +34,41 @@ type symbols = (module Symbols)
 
 module Make (D : Display) =
 struct
-  let display : display = (module D)
-  let glider = match D.display_type with
+  let display_type = D.display_type
+
+  let glider = match display_type with
     | None             -> ""
     | Ascii            -> ""
     | Utf8 | Powerline -> "⠠⠵"
-  let branch = match D.display_type with
+  let branch = match display_type with
     | None             -> ""
     | Ascii | Utf8     -> ""
     | Powerline        -> ""
-  let line = match D.display_type with
+  let line = match display_type with
     | None             -> ""
     | Ascii | Utf8     -> ""
     | Powerline        -> ""
-  let hold = match D.display_type with
+  let hold = match display_type with
     | None             -> ""
     | Ascii | Utf8     -> "H"
     | Powerline        -> ""
-  let right_plain = match D.display_type with
+  let right_plain = match display_type with
     | None             -> ""
     | Ascii | Utf8     -> ":"
     | Powerline        -> ""
-  let right = match D.display_type with
+  let right = match display_type with
     | None             -> ""
     | Ascii | Utf8     -> ":"
     | Powerline        -> ""
-  let left_plain = match D.display_type with
+  let left_plain = match display_type with
     | None             -> ""
     | Ascii | Utf8     -> "<"
     | Powerline        -> ""
-  let check = match D.display_type with
+  let check = match display_type with
     | None             -> ""
     | Ascii            -> "[x]"
     | Utf8 | Powerline -> "✔"
-  let nocheck = match D.display_type with
+  let nocheck = match display_type with
     | None             -> ""
     | Ascii            -> "[ ]"
     | Utf8 | Powerline -> "✘"
