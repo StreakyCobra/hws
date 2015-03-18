@@ -31,6 +31,8 @@ val utf8 : bool ref
 (** Boolean reference to enable/disable use of utf8 symbols. Enabled by
     default. *)
 
+val display : Display.display_type ref
+
 val original_dir : string ref
 (** The path to original directory where the program was launched. *)
 

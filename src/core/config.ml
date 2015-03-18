@@ -20,6 +20,7 @@ let colored           = Ansi.enabled
 let powerline         = ref false
 let utf8              = ref true
 let verbose           = ref false
+let display = ref Display.Powerline
 
 (* Constants *)
 let workspace_dirname = ".hws"
@@ -39,19 +40,19 @@ let ignore_file       = ref ""
 let symbols_cache : Symbols.symbols option ref = ref None
 
 (* Select encoding according to flags *)
-let encoding () : Symbols.encoding =
+let encoding () : Display.display =
   if !powerline then
-    (module Symbols.Powerline)
+    (module Display.Powerline)
   else if !utf8 then
-    (module Symbols.Utf8)
+    (module Display.Utf8)
   else
-    (module Symbols.Ascii)
+    (module Display.Ascii)
 
 let symbols () : Symbols.symbols = match !symbols_cache with
   | None -> (* Module not created, create and cache it *)
     begin
       (* Load module *)
-      let (module E) : Symbols.encoding = encoding () in
+      let (module E) : Display.display = encoding () in
       let (module S) : Symbols.symbols = (module Symbols.Make(E)) in
       (* Cache it *)
       symbols_cache := Some (module S);

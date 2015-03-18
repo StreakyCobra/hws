@@ -15,17 +15,20 @@
  * You should have received a copy of the GNU General Public License
  * along with hws.  If not, see <http://www.gnu.org/licenses/>. *)
 
-let key = "init"
+type display_type =
+  | Powerline
+  | Utf8
+  | Ascii
+  | None
 
-(* First space needed for help message alignment *)
-let doc = " Initialize the workspace"
+module type Display =
+sig
+  val display : display_type
+end
 
-let specs = []
+type display = (module Display)
 
-let handle_anon_arg arg = raise @@ Arg.Bad ("'" ^ arg ^ "' argument not supported")
-
-let handle_rest_arg arg = raise @@ Arg.Bad ("'" ^ arg ^ "' argument not supported")
-
-let execute () =
-  let (module R) : (module Render.Render) = (module Render.Make (Display.None)) in
-  print_endline @@ R.branch "Init command called"
+module Powerline : Display = struct let display = Powerline end
+module Utf8 : Display      = struct let display = Utf8 end
+module Ascii : Display     = struct let display = Ascii end
+module None : Display      = struct let display = None end

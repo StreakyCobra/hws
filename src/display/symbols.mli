@@ -17,21 +17,6 @@
 
 (** Symbols provider for different encodings .*)
 
-module type Encoding
-(** The module type providing an encoding. *)
-
-type encoding = (module Encoding)
-(** Shortcut type for Encoding modules *)
-
-module Ascii : Encoding
-(** Ascii encoding module. *)
-
-module Utf8 : Encoding
-(** UTF8 encoding module. *)
-
-module Powerline : Encoding
-(** UTF8 encoding module with powerline glyphs support. *)
-
 module type Symbols =
 sig
   val glider :string
@@ -49,5 +34,5 @@ end
 type symbols = (module Symbols)
 (** Shortcut type for Symbols modules *)
 
-module Make : functor (E : Encoding) -> Symbols
+module Make : functor (E : Display.Display) -> Symbols
 (** Functor defining the Symbols module from an Encoding. *)

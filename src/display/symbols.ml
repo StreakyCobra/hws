@@ -15,20 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with hws.  If not, see <http://www.gnu.org/licenses/>. *)
 
-type encoding_flags =
-  | None
-  | Ascii
-  | Utf8
-  | Powerline
-
-module type Encoding = sig val t : encoding_flags end
-type encoding = (module Encoding)
-
-(* Modules corresponding to encoding_flags *)
-module None      : Encoding = struct let t = None      end
-module Ascii     : Encoding = struct let t = Ascii     end 
-module Utf8      : Encoding = struct let t = Utf8      end
-module Powerline : Encoding = struct let t = Powerline end
+open Display;;
 
 module Default =
 struct
@@ -85,15 +72,15 @@ end
 
 type symbols = (module Symbols)
 
-module Make (E : Encoding) =
+module Make (E : Display) =
 struct
-  let glider = Default.glider E.t
-  let branch = Default.branch E.t
-  let line = Default.line E.t
-  let hold = Default.hold E.t
-  let right_plain = Default.right_plain E.t
-  let right = Default.right E.t
-  let left_plain = Default.left_plain E.t
-  let check = Default.check E.t
-  let nocheck = Default.nocheck E.t
+  let glider = Default.glider E.display
+  let branch = Default.branch E.display
+  let line = Default.line E.display
+  let hold = Default.hold E.display
+  let right_plain = Default.right_plain E.display
+  let right = Default.right E.display
+  let left_plain = Default.left_plain E.display
+  let check = Default.check E.display
+  let nocheck = Default.nocheck E.display
 end
