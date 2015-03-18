@@ -59,6 +59,7 @@ end
 
 module type Symbols =
 sig
+  val display : Display.display
   val glider : string
   val branch : string
   val line : string
@@ -74,13 +75,14 @@ type symbols = (module Symbols)
 
 module Make (E : Display) =
 struct
-  let glider = Default.glider E.display
-  let branch = Default.branch E.display
-  let line = Default.line E.display
-  let hold = Default.hold E.display
-  let right_plain = Default.right_plain E.display
-  let right = Default.right E.display
-  let left_plain = Default.left_plain E.display
-  let check = Default.check E.display
-  let nocheck = Default.nocheck E.display
+  let display : Display.display = (module E)
+  let glider = Default.glider E.display_type
+  let branch = Default.branch E.display_type
+  let line = Default.line E.display_type
+  let hold = Default.hold E.display_type
+  let right_plain = Default.right_plain E.display_type
+  let right = Default.right E.display_type
+  let left_plain = Default.left_plain E.display_type
+  let check = Default.check E.display_type
+  let nocheck = Default.nocheck E.display_type
 end

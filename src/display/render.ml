@@ -17,11 +17,6 @@
 
 open Display;;
 
-module type Render =
-sig
-  val branch : string -> string
-end
-
 module Default =
 struct
   let branch t name = match t with
@@ -31,8 +26,17 @@ struct
     | None      -> "N " ^ name
 end
 
+module type Render =
+sig
+  val display : Display.display
+  val branch : string -> string
+end
+
+type render = (module Render)
+
 module Make (D : Display.Display) : Render =
 struct
-  let branch = Default.branch D.display
+  let display : Display.display = (module D)
+  let branch = Default.branch D.display_type
 end
 

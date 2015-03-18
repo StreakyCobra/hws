@@ -23,12 +23,27 @@ type display_type =
 
 module type Display =
 sig
-  val display : display_type
+  val display_type : display_type
 end
 
 type display = (module Display)
 
-module Powerline : Display = struct let display = Powerline end
-module Utf8 : Display      = struct let display = Utf8 end
-module Ascii : Display     = struct let display = Ascii end
-module None : Display      = struct let display = None end
+module Powerline : Display =
+struct
+  let display_type = Powerline
+end
+
+module Utf8 : Display      =
+struct
+  let display_type = Utf8
+end
+
+module Ascii : Display     =
+struct
+  let display_type = Ascii
+end
+
+module None : Display      =
+struct
+  let display_type = None
+end
