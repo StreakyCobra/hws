@@ -20,7 +20,9 @@ let colored           = Ansi.enabled
 let powerline         = ref false
 let utf8              = ref true
 let verbose           = ref false
-let render : Render.render ref = 
+
+(* Modules *)
+let render = 
   let (module D) : Display.display = (module Display.Utf8) in
   let (module R) : Render.render = (module Render.Make (D)) in
   ref ((module R) : Render.render)
@@ -40,7 +42,7 @@ let projects_file     = ref ""
 let ignore_file       = ref ""
 
 (* Select encoding according to flags *)
-let select_display () =
+let select_render () =
   let (module D) : Display.display = if !powerline then
     (module Display.Powerline)
   else if !utf8 then
@@ -62,5 +64,5 @@ let prepare_paths () =
 let read_config () = ()
 
 let init () =
-  select_display ();
+  select_render ();
   prepare_paths ()

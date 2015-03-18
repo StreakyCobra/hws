@@ -17,49 +17,9 @@
 
 open Display;;
 
-module Default =
-struct
-  let glider = function
-    | None             -> ""
-    | Ascii            -> ""
-    | Utf8 | Powerline -> "⠠⠵"
-  let branch = function
-    | None             -> ""
-    | Ascii | Utf8     -> ""
-    | Powerline        -> ""
-  let line = function
-    | None             -> ""
-    | Ascii | Utf8     -> ""
-    | Powerline        -> ""
-  let hold = function
-    | None             -> ""
-    | Ascii | Utf8     -> "H"
-    | Powerline        -> ""
-  let right_plain = function
-    | None             -> ""
-    | Ascii | Utf8     -> ":"
-    | Powerline        -> ""
-  let right = function
-    | None             -> ""
-    | Ascii | Utf8     -> ":"
-    | Powerline        -> ""
-  let left_plain = function
-    | None             -> ""
-    | Ascii | Utf8     -> "<"
-    | Powerline        -> ""
-  let check = function
-    | None             -> ""
-    | Ascii            -> "[x]"
-    | Utf8 | Powerline -> "✔"
-  let nocheck = function
-    | None             -> ""
-    | Ascii            -> "[ ]"
-    | Utf8 | Powerline -> "✘"
-end
-
 module type Symbols =
 sig
-  val display : Display.display
+  val display : display
   val glider : string
   val branch : string
   val line : string
@@ -73,16 +33,43 @@ end
 
 type symbols = (module Symbols)
 
-module Make (E : Display) =
+module Make (D : Display) =
 struct
-  let display : Display.display = (module E)
-  let glider = Default.glider E.display_type
-  let branch = Default.branch E.display_type
-  let line = Default.line E.display_type
-  let hold = Default.hold E.display_type
-  let right_plain = Default.right_plain E.display_type
-  let right = Default.right E.display_type
-  let left_plain = Default.left_plain E.display_type
-  let check = Default.check E.display_type
-  let nocheck = Default.nocheck E.display_type
+  let display : display = (module D)
+  let glider = match D.display_type with
+    | None             -> ""
+    | Ascii            -> ""
+    | Utf8 | Powerline -> "⠠⠵"
+  let branch = match D.display_type with
+    | None             -> ""
+    | Ascii | Utf8     -> ""
+    | Powerline        -> ""
+  let line = match D.display_type with
+    | None             -> ""
+    | Ascii | Utf8     -> ""
+    | Powerline        -> ""
+  let hold = match D.display_type with
+    | None             -> ""
+    | Ascii | Utf8     -> "H"
+    | Powerline        -> ""
+  let right_plain = match D.display_type with
+    | None             -> ""
+    | Ascii | Utf8     -> ":"
+    | Powerline        -> ""
+  let right = match D.display_type with
+    | None             -> ""
+    | Ascii | Utf8     -> ":"
+    | Powerline        -> ""
+  let left_plain = match D.display_type with
+    | None             -> ""
+    | Ascii | Utf8     -> "<"
+    | Powerline        -> ""
+  let check = match D.display_type with
+    | None             -> ""
+    | Ascii            -> "[x]"
+    | Utf8 | Powerline -> "✔"
+  let nocheck = match D.display_type with
+    | None             -> ""
+    | Ascii            -> "[ ]"
+    | Utf8 | Powerline -> "✘"
 end

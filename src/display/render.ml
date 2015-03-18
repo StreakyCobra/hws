@@ -18,21 +18,9 @@
 open Display;;
 open Symbols;;
 
-module Default =
-struct
-  let branch t name =
-    let (module D) : display = Display.get t in
-    let (module S) : symbols = (module Symbols.Make (D)) in
-    match t with
-    | Powerline -> S.branch ^ name
-    | Utf8      -> S.branch ^ name
-    | Ascii     -> S.branch ^ name
-    | None      -> S.branch ^ name
-end
-
 module type Render =
 sig
-  val display : Display.display
+  val display : display
   val branch : string -> string
 end
 
@@ -40,7 +28,13 @@ type render = (module Render)
 
 module Make (D : Display.Display) : Render =
 struct
-  let display : Display.display = (module D)
-  let branch = Default.branch D.display_type
+  let display : display = (module D)
+  let branch name =
+    let (module S) : symbols = (module Symbols.Make (D)) in
+    match D.display_type with
+    | Powerline -> S.branch ^ name
+    | Utf8      -> S.branch ^ name
+    | Ascii     -> S.branch ^ name
+    | None      -> S.branch ^ name
 end
 
