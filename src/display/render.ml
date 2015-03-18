@@ -21,6 +21,7 @@ open Symbols;;
 
 module type Render =
 sig
+  val project_summary : unit -> string
   val indent : string -> string
   val branch : string -> string
 end
@@ -30,6 +31,11 @@ type render = (module Render)
 module Make (D : Display.Display) : Render =
 struct
   let symbols : symbols = (module Symbols.Make (D))
+
+  let project_summary () =
+    let project = Ansi.format [Ansi.blue; Ansi.Bold] Version.project in
+    let description = Ansi.format [Ansi.blue] Version.description in
+    project ^ ", " ^ description
 
   let indent = (^) "    "
 

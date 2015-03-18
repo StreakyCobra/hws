@@ -85,15 +85,13 @@ let run_cmd () =
 
 (* Main function, run the application *)
 let main () =
-  let project = Ansi.format [Ansi.blue; Ansi.Bold] Version.project in
-  let description = Ansi.format [Ansi.blue] Version.description in
-  let summary = project ^ ", " ^ description in
+  let (module R) = !Config.render in
   (* First read the configuration file *)
   Config.read_config ();
   (* Set the specifications array *)
   specs := Arg.align @@ cmds_specs () @ general_specs ();
   (* Parse arguments, overwrite the config setted by the config file *)
-  Arg.parse_dynamic specs handle_anon_arg summary;
+  Arg.parse_dynamic specs handle_anon_arg @@ R.project_summary ();
   (* Setup the configuration *)
   Config.init ();
   (* Run the subcommand *)

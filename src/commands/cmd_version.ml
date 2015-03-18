@@ -18,10 +18,8 @@
 open Ansi;;
 
 let display_normal () =
-  let project = Ansi.format [Ansi.blue; Ansi.Bold] Version.project in
-  let description = Ansi.format [Ansi.blue] Version.description in
-  let summary = project ^ ", " ^ description in
-  print_nl [] summary;
+  let (module R) = !Config.render in
+  print_nl [] @@ R.project_summary ();
   print [] "Version: ";
   print_nl [Bold; red] Version.str
 
