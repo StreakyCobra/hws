@@ -26,7 +26,7 @@ let specs = ref []
 (* The list of commands available *)
 let cmds_list : command list = [
   (module Command.Make(Cmd_init));
-  (module Command.Make(Cmd_debug));
+  (* (module Command.Make(Cmd_debug)); *)
   (module Command.Make(Cmd_status));
   (module Command.Make(Cmd_version));
 ]
@@ -88,12 +88,14 @@ let main () =
   let project = Ansi.format [Ansi.blue; Ansi.Bold] Version.project in
   let description = Ansi.format [Ansi.blue] Version.description in
   let summary = project ^ ", " ^ description in
-  (* Read the configuration file *)
-  Config.init ();
+  (* First read the configuration file, to be overwritten by CLI arguments *)
+  Config.read_config ();
   (* Set the specifications array *)
   specs := Arg.align @@ cmds_specs () @ general_specs ();
   (* Parse arguments *)
   Arg.parse_dynamic specs handle_anon_arg summary;
+  (* Prepare the configuration *)
+  Config.init ();
   (* Run the subcommand *)
   run_cmd ()
 

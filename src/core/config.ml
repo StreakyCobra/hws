@@ -20,7 +20,10 @@ let colored           = Ansi.enabled
 let powerline         = ref false
 let utf8              = ref true
 let verbose           = ref false
-let display = ref Display.Powerline
+let render : Render.render ref = 
+  let (module D) : Display.display = (module Display.Utf8) in
+  let (module R) : Render.render = (module Render.Make (D)) in
+  ref ((module R) : Render.render)
 
 (* Constants *)
 let workspace_dirname = ".hws"
@@ -36,30 +39,16 @@ let config_file       = ref ""
 let projects_file     = ref ""
 let ignore_file       = ref ""
 
-(* Caching *)
-let symbols_cache : Symbols.symbols option ref = ref None
-
 (* Select encoding according to flags *)
-let encoding () : Display.display =
-  if !powerline then
+let select_display () =
+  let (module D) : Display.display = if !powerline then
     (module Display.Powerline)
   else if !utf8 then
     (module Display.Utf8)
   else
-    (module Display.Ascii)
-
-let symbols () : Symbols.symbols = match !symbols_cache with
-  | None -> (* Module not created, create and cache it *)
-    begin
-      (* Load module *)
-      let (module E) : Display.display = encoding () in
-      let (module S) : Symbols.symbols = (module Symbols.Make(E)) in
-      (* Cache it *)
-      symbols_cache := Some (module S);
-      (* Return it *)
-      (module S)
-    end
-  | Some s -> s (* Module existing, use it *)
+    (module Display.Ascii) in
+  let (module R) : Render.render = (module Render.Make (D)) in
+  render := ((module R) : Render.render)
 
 let prepare_paths () =
   original_dir   := Sys.getcwd ();
@@ -73,5 +62,5 @@ let prepare_paths () =
 let read_config () = ()
 
 let init () =
-  prepare_paths ();
-  read_config ()
+  select_display ();
+  prepare_paths ()

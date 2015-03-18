@@ -31,7 +31,8 @@ val utf8 : bool ref
 (** Boolean reference to enable/disable use of utf8 symbols. Enabled by
     default. *)
 
-val display : Display.display_type ref
+val render : Render.render ref
+(** Reference to the selected render system. *)
 
 val original_dir : string ref
 (** The path to original directory where the program was launched. *)
@@ -51,8 +52,8 @@ val projects_file : string ref
 val ignore_file : string ref
 (** The path to workspace directory. *)
 
-val symbols : unit -> Symbols.symbols
-(** Return the current Symbols module by looking at utf8 and powerline flags. *)
+val read_config : unit -> unit
+(** Initialize the configuration. *)
 
 val init : unit -> unit
 (** Initialize the configuration. *)

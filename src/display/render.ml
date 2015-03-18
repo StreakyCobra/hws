@@ -16,14 +16,18 @@
  * along with hws.  If not, see <http://www.gnu.org/licenses/>. *)
 
 open Display;;
+open Symbols;;
 
 module Default =
 struct
-  let branch t name = match t with
-    | Powerline -> "P " ^ name
-    | Utf8      -> "U " ^ name
-    | Ascii     -> "A " ^ name
-    | None      -> "N " ^ name
+  let branch t name =
+    let (module D) : display = Display.get t in
+    let (module S) : symbols = (module Symbols.Make (D)) in
+    match t with
+    | Powerline -> S.branch ^ name
+    | Utf8      -> S.branch ^ name
+    | Ascii     -> S.branch ^ name
+    | None      -> S.branch ^ name
 end
 
 module type Render =

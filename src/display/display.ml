@@ -47,3 +47,9 @@ module None : Display      =
 struct
   let display_type = None
 end
+
+let get : display_type -> display = function
+  | Powerline -> (module Powerline)
+  | Ascii -> (module Ascii)
+  | Utf8 -> (module Utf8)
+  | None -> (module None)

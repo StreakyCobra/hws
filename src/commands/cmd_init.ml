@@ -27,5 +27,5 @@ let handle_anon_arg arg = raise @@ Arg.Bad ("'" ^ arg ^ "' argument not supporte
 let handle_rest_arg arg = raise @@ Arg.Bad ("'" ^ arg ^ "' argument not supported")
 
 let execute () =
-  let (module R) : (module Render.Render) = (module Render.Make (Display.None)) in
+  let (module R) = !Config.render in
   print_endline @@ R.branch "Init command called"
