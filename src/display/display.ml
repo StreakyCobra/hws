@@ -16,10 +16,9 @@
  * along with hws.  If not, see <http://www.gnu.org/licenses/>. *)
 
 type display_type =
-  | Powerline
-  | Utf8
   | Ascii
-  | None
+  | Utf8
+  | Powerline
 
 module type Display =
 sig
@@ -28,28 +27,11 @@ end
 
 type display = (module Display)
 
-module Powerline : Display =
-struct
-  let display_type = Powerline
-end
-
-module Utf8 : Display      =
-struct
-  let display_type = Utf8
-end
-
-module Ascii : Display     =
-struct
-  let display_type = Ascii
-end
-
-module None : Display      =
-struct
-  let display_type = None
-end
+module Ascii     : Display = struct let display_type = Ascii     end
+module Utf8      : Display = struct let display_type = Utf8      end
+module Powerline : Display = struct let display_type = Powerline end
 
 let get : display_type -> display = function
+  | Ascii     -> (module Ascii)
+  | Utf8      -> (module Utf8)
   | Powerline -> (module Powerline)
-  | Ascii -> (module Ascii)
-  | Utf8 -> (module Utf8)
-  | None -> (module None)

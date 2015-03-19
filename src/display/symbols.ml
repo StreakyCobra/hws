@@ -19,57 +19,67 @@ open Display;;
 
 module type Symbols =
 sig
-  val glider : string
-  val branch : string
-  val line : string
-  val hold : string
+  val glider      : string
+  val branch      : string
+  val line        : string
+  val hold        : string
   val right_plain : string
-  val right : string
-  val left_plain : string
-  val check : string
-  val nocheck : string
+  val right       : string
+  val left_plain  : string
+  val check       : string
+  val nocheck     : string
 end
 
 type symbols = (module Symbols)
 
-module Make (D : Display) =
+module Make (D : Display) : Symbols =
 struct
+
   let display_type = D.display_type
 
   let glider = match display_type with
-    | None             -> ""
-    | Ascii            -> ""
-    | Utf8 | Powerline -> "⠠⠵"
+    | Ascii     -> ""
+    | Utf8      -> "⠠⠵"
+    | Powerline -> "⠠⠵"
+
   let branch = match display_type with
-    | None             -> ""
-    | Ascii | Utf8     -> ""
-    | Powerline        -> ""
+    | Ascii     -> ""
+    | Utf8      -> ""
+    | Powerline -> ""
+
   let line = match display_type with
-    | None             -> ""
-    | Ascii | Utf8     -> ""
-    | Powerline        -> ""
+    | Ascii     -> ""
+    | Utf8      -> ""
+    | Powerline -> ""
+
   let hold = match display_type with
-    | None             -> ""
-    | Ascii | Utf8     -> "H"
-    | Powerline        -> ""
+    | Ascii     -> "H"
+    | Utf8      -> "H"
+    | Powerline -> ""
+
   let right_plain = match display_type with
-    | None             -> ""
-    | Ascii | Utf8     -> ":"
-    | Powerline        -> ""
+    | Ascii     -> ">"
+    | Utf8      -> ">"
+    | Powerline -> ""
+
   let right = match display_type with
-    | None             -> ""
-    | Ascii | Utf8     -> ":"
-    | Powerline        -> ""
+    | Ascii     -> ">"
+    | Utf8      -> ">"
+    | Powerline -> ""
+
   let left_plain = match display_type with
-    | None             -> ""
-    | Ascii | Utf8     -> "<"
-    | Powerline        -> ""
+    | Ascii     -> "<"
+    | Utf8      -> "<"
+    | Powerline -> ""
+
   let check = match display_type with
-    | None             -> ""
-    | Ascii            -> "[x]"
-    | Utf8 | Powerline -> "✔"
+    | Ascii     -> "[x]"
+    | Utf8      -> "✔"
+    | Powerline -> "✔"
+
   let nocheck = match display_type with
-    | None             -> ""
-    | Ascii            -> "[ ]"
-    | Utf8 | Powerline -> "✘"
+    | Ascii     -> "[ ]"
+    | Utf8      -> "✘"
+    | Powerline -> "✘"
+
 end
