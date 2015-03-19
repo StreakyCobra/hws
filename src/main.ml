@@ -104,12 +104,17 @@ let color_hack () =
   if List.exists (fun a -> a = "--nocolor") (Array.to_list Sys.argv) then
     Config.colored := false
 
+(* Print a message on *)
+let fail msg = 
+  flush stdout;
+  prerr_endline @@ Ansi.format [Ansi.Bold; Ansi.red] "Error: " ^ msg;
+  exit 1
+
 (* Execute the main function, except when launched from the toplevel *)
 let () = if not !Sys.interactive then
     begin
       color_hack ();
       try main () with
-      | Failure a ->
-        let errmsg = Ansi.format [Ansi.Bold; Ansi.red] "Error: " ^ a in
-        prerr_endline errmsg
+      | Failure a -> fail a
+      | _ -> fail "Internal error"
     end
