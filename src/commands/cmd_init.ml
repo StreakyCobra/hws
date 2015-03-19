@@ -32,4 +32,10 @@ let handle_rest_arg arg =
 
 let execute () =
   let (module R) = !Config.render in
-  print_endline @@ R.branch "Init command called"
+  print_endline @@ R.title "Status";
+  print_endline @@ R.repository "path/to/my/repo";
+  print_endline @@ R.branch "This is one branch";
+  print_endline @@ R.branch "This is another branch";
+  print_endline @@ R.repository "this/is/another/one";
+  print_endline @@ R.branch "This is one branch";
+  print_endline @@ R.branch "This is another branch"

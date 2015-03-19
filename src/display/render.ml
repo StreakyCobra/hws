@@ -24,6 +24,8 @@ module type Render =
 sig
   val indent          : string -> string
   val project_summary : unit -> string
+  val title           : ?color:color -> string -> string
+  val repository      : ?color:color -> string -> string
   val branch          : string -> string
   val content_header  : ?exp:bool -> ?color:color -> ?pre:string -> string -> string
   val file_content    : ?color:color -> string -> string
@@ -45,22 +47,48 @@ struct
     let description = format [blue] Version.description in
     project ^ ", " ^ description
 
+  let title ?(color=Magenta) name =
+    let (module S) : symbols = symbols in
+    let fmt = match D.display_type with
+    | Ascii | Utf8 -> format [Background color; white]
+    | Powerline    -> format [Foreground color]
+    in
+    String.concat "" [
+      fmt @@ S.left;
+      format [Background color; white; Bold] @@ " " ^ name ^ " ";
+      fmt @@ S.right;
+      "\n"
+    ]
+
+  let repository ?(color=Blue) name =
+    let (module S) : symbols = symbols in
+    let corrected = match D.display_type with
+      | Ascii | Utf8 -> name
+      | Powerline    -> Str.global_replace (Str.regexp "/") S.separator name in
+    let fmt = match D.display_type with
+    | Ascii | Utf8 -> format [Background color; white]
+    | Powerline    -> format [Foreground color]
+    in
+    String.concat "" [
+      format [Background color; white; Bold] @@ " " ^ S.bullet;
+      format [Background color; white] @@ " " ^ corrected ^ " ";
+      fmt S.right
+    ]
+
   let branch name =
     let (module S) : symbols = symbols in
-    indent @@ format [red] S.branch ^ " " ^ (format [blue; Bold] name)
+    indent @@ format [red] S.branch ^ " " ^ (format [blue] name)
 
   let content_header ?(exp=false) ?(color=White) ?(pre="") filename =
     let (module S) : symbols = symbols in
     let expsym = if exp then S.box_top_left ^ " " else "" in
-    let sym = match D.display_type with
-      | Ascii | Utf8 ->
-        format [Background color; black;] ">"
-      | Powerline ->
-        format [Foreground color] S.right_plain
+    let fmt = match D.display_type with
+      | Ascii | Utf8 -> format [Background color; black;]
+      | Powerline    -> format [Foreground color]
     in
     String.concat "" [
       format [Background color; black;] @@
-      expsym ^ pre ^ " "; sym ^ " " ^ filename]
+      expsym ^ pre ^ " "; fmt S.right ^ " " ^ filename]
 
   let file_content ?(color=White) filename =
     let (module S) : symbols = symbols in

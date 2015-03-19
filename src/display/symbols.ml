@@ -20,12 +20,13 @@ open Display;;
 module type Symbols =
 sig
   val glider          : string
+  val bullet          : string
   val branch          : string
   val line            : string
   val hold            : string
-  val right_plain     : string
   val right           : string
-  val left_plain      : string
+  val left            : string
+  val separator       : string
   val check           : string
   val nocheck         : string
   val box_top_left    : string
@@ -45,6 +46,11 @@ struct
     | Utf8      -> "⠠⠵"
     | Powerline -> "⠠⠵"
 
+  let bullet = match display_type with
+    | Ascii     -> "-"
+    | Utf8      -> "•"
+    | Powerline -> "•"
+
   let branch = match display_type with
     | Ascii     -> ""
     | Utf8      -> ""
@@ -60,20 +66,20 @@ struct
     | Utf8      -> "H"
     | Powerline -> ""
 
-  let right_plain = match display_type with
-    | Ascii     -> ">"
+  let right = match display_type with
+    | Ascii     -> ":"
     | Utf8      -> ">"
     | Powerline -> ""
 
-  let right = match display_type with
-    | Ascii     -> ">"
-    | Utf8      -> ">"
-    | Powerline -> ""
-
-  let left_plain = match display_type with
+  let left = match display_type with
     | Ascii     -> "<"
     | Utf8      -> "<"
     | Powerline -> ""
+
+  let separator = match display_type with
+    | Ascii     -> "/"
+    | Utf8      -> "/"
+    | Powerline -> "  "
 
   let check = match display_type with
     | Ascii     -> "[x]"
