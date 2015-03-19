@@ -1,5 +1,5 @@
-<src>: include
-<src/display>: include
-<src/commands>: include
-<src/core>: include
-<tests>: include
+<src>          : include
+<src/display>  : include
+<src/commands> : include
+<src/core>     : include
+<tests>        : include

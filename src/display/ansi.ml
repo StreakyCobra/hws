@@ -62,10 +62,10 @@ type command =
   | MvFirstColumn
 
 (* Sequence control *)
-let csi     = "\027["
-let css     = ";"
-let sgr_end = "m"
-let nl      = "\n"
+let csi           = "\027["
+let css           = ";"
+let sgr_end       = "m"
+let nl            = "\n"
 
 (* Normal foreground colors *)
 let black         = Foreground Black
@@ -108,25 +108,15 @@ let on_hi_cyan    = IntensiveBackground Cyan
 let on_hi_white   = IntensiveBackground White
 
 (* Sequences helpers *)
-let reline = [ClearLine; MvFirstColumn]
+let reline        = [ClearLine; MvFirstColumn]
 
-(* Function over styles and colors *)
+(* Functions to work with styles and colors *)
 let invert = function
   | Foreground color -> Background color
   | Background color -> Foreground color
   | IntensiveForeground color -> IntensiveBackground color
   | IntensiveBackground color -> IntensiveForeground color
   | Reset | Bold | Underline | Blink | Inverse as l -> l
-
-let complement = function
-  | Black   -> White
-  | Red     -> White
-  | Green   -> White
-  | Yellow  -> Black
-  | Blue    -> White
-  | Magenta -> Black
-  | Cyan    -> Black
-  | White   -> Black
 
 (* Type to code conversion *)
 let color_code = function
@@ -145,21 +135,21 @@ let sgr_code = function
   | Underline               -> 4
   | Blink                   -> 5
   | Inverse                 -> 7
-  | Foreground col          -> 30 + (color_code col)
-  | Background col          -> 40 + (color_code col)
-  | IntensiveForeground col -> 90 + (color_code col)
+  | Foreground col          -> 30  + (color_code col)
+  | Background col          -> 40  + (color_code col)
+  | IntensiveForeground col -> 90  + (color_code col)
   | IntensiveBackground col -> 100 + (color_code col)
 
 let ansi_code = function
-  | LineUp n    -> string_of_int n ^ "F"
-  | LineDown n  -> string_of_int n ^ "E"
-  | Up n        -> string_of_int n ^ "A"
-  | Down n      -> string_of_int n ^ "B"
-  | Right n     -> string_of_int n ^ "C"
-  | Left n      -> string_of_int n ^ "D"
-  | ClearScreen -> "2J"
-  | ClearLine   -> "2K"
-  | MvFirstColumn  -> "0G"
+  | LineUp n      -> string_of_int n ^ "F"
+  | LineDown n    -> string_of_int n ^ "E"
+  | Up n          -> string_of_int n ^ "A"
+  | Down n        -> string_of_int n ^ "B"
+  | Right n       -> string_of_int n ^ "C"
+  | Left n        -> string_of_int n ^ "D"
+  | ClearScreen   -> "2J"
+  | ClearLine     -> "2K"
+  | MvFirstColumn -> "0G"
 
 let sgr styles =
   let beg = if styles = [] then "" else csi in

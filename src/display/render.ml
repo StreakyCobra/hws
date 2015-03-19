@@ -22,8 +22,8 @@ open Utils;;
 
 module type Render =
 sig
-  val project_summary : unit -> string
   val indent          : string -> string
+  val project_summary : unit -> string
   val branch          : string -> string
   val content_header  : ?exp:bool -> ?color:Ansi.color -> ?pre:string -> string -> string
   val file_content    : ?color:Ansi.color -> string -> string
@@ -38,12 +38,12 @@ struct
 
   let symbols : symbols = (module Symbols.Make (D))
 
+  let indent = (^) "    "
+
   let project_summary () =
     let project = Ansi.format [Ansi.blue; Ansi.Bold] Version.project in
     let description = Ansi.format [Ansi.blue] Version.description in
     project ^ ", " ^ description
-
-  let indent = (^) "    "
 
   let branch name =
     let (module S) : symbols = symbols in

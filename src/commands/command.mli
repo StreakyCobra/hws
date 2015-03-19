@@ -15,17 +15,17 @@
  * You should have received a copy of the GNU General Public License
  * along with hws.  If not, see <http://www.gnu.org/licenses/>. *)
 
-(** Command module for defining subcommand of the application. *)
+(** The command module for defining subcommand of the application. *)
 
 module type Command_provider =
 sig
-  val key : string
+  val key             : string
   (** The name of the command. *)
 
-  val doc : string
+  val doc             : string
   (** The description of the command. *)
 
-  val specs : (Arg.key * Arg.spec * Arg.doc) list
+  val specs           : (Arg.key * Arg.spec * Arg.doc) list
   (** The specification of the command. *)
 
   val handle_anon_arg : string -> unit
@@ -34,7 +34,7 @@ sig
   val handle_rest_arg : string -> unit
   (** A function handling the rest arguments. *)
 
-  val execute : unit -> unit
+  val execute         : unit -> unit
   (** Run the command. *)
 end
 (** The provider type module for defining the interface to use for modules

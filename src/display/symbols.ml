@@ -19,17 +19,17 @@ open Display;;
 
 module type Symbols =
 sig
-  val glider       : string
-  val branch       : string
-  val line         : string
-  val hold         : string
-  val right_plain  : string
-  val right        : string
-  val left_plain   : string
-  val check        : string
-  val nocheck      : string
-  val box_top_left : string
-  val box_vertical : string
+  val glider          : string
+  val branch          : string
+  val line            : string
+  val hold            : string
+  val right_plain     : string
+  val right           : string
+  val left_plain      : string
+  val check           : string
+  val nocheck         : string
+  val box_top_left    : string
+  val box_vertical    : string
   val box_bottom_left : string
 end
 

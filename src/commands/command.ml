@@ -17,12 +17,12 @@
 
 module type Command_provider =
 sig
-  val key : string
-  val doc : string
-  val specs : (Arg.key * Arg.spec * Arg.doc) list
+  val key             : string
+  val doc             : string
+  val specs           : (Arg.key * Arg.spec * Arg.doc) list
   val handle_anon_arg : string -> unit
   val handle_rest_arg : string -> unit
-  val execute : unit -> unit
+  val execute         : unit -> unit
 end
 
 module type Command =

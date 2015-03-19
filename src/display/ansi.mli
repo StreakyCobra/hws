@@ -92,10 +92,6 @@ val on_hi_white   : style
 val invert        : style -> style
 (** Return the inversed color. E.g. white returns on_white *)
   
-val complement    : color -> color
-(** Return the complement of the color, to maximize contrast between foreground
-and background. *)
-  
 val reline        : command list
 (** Sequence of commands to rewrite current line *)    
 

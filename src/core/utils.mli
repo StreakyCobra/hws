@@ -15,15 +15,15 @@
  * You should have received a copy of the GNU General Public License
  * along with hws.  If not, see <http://www.gnu.org/licenses/>. *)
 
-val ( <| ) : ('a -> 'b) -> ('c -> 'a) -> 'c -> 'b
+val ( <| )       : ('a -> 'b) -> ('c -> 'a) -> 'c -> 'b
 (** Infix function composition operator. *)
 
-val flip : ('a -> 'b -> 'c) -> 'b -> 'a -> 'c
+val flip         : ('a -> 'b -> 'c) -> 'b -> 'a -> 'c
 (** Flip arguments of the given function: f x y = f y x. *)
 
 val is_directory : string -> bool
 (** The Sys.is_directory function have a problem with symbolic links. Wrapper to
     ignore such errors. *)
 
-val read_file : string -> string list
+val read_file    : string -> string list
 (** Read the content of a file. *)

@@ -17,43 +17,43 @@
 
 (** The configuration manager of the application. *)
 
-val colored : bool ref
+val colored        : bool ref
 (** Boolean reference to enable/disable colored output. Enabled by default. *)
 
-val verbose : bool ref
+val verbose        : bool ref
 (** Boolean reference to enable/disable verbose output. Disabled by default. *)
 
-val powerline : bool ref
+val powerline      : bool ref
 (** Boolean reference to enable/disable use of powerline glyphs. Disabled by
     default. *)
 
-val utf8 : bool ref
+val utf8           : bool ref
 (** Boolean reference to enable/disable use of utf8 symbols. Enabled by
     default. *)
 
-val render : Render.render ref
+val render         : Render.render ref
 (** Reference to the selected render system. *)
 
-val original_dir : string ref
+val original_dir   : string ref
 (** The path to original directory where the program was launched. *)
 
 val workspace_root : string ref
 (** The path to workspace root. *)
 
-val workspace_dir : string ref
+val workspace_dir  : string ref
 (** The path to workspace directory. *)
 
-val config_file : string ref
+val config_file    : string ref
 (** The path to workspace directory. *)
 
-val projects_file : string ref
+val projects_file  : string ref
 (** The path to workspace directory. *)
 
-val ignore_file : string ref
+val ignore_file    : string ref
 (** The path to workspace directory. *)
 
-val read_config : unit -> unit
+val read_config    : unit -> unit
 (** Initialize the configuration. *)
 
-val init : unit -> unit
+val init           : unit -> unit
 (** Initialize the configuration. *)

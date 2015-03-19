@@ -1,50 +1,41 @@
 # Use bash
-SHELL := /bin/bash
-
-# If the first argument is "run", disable other given command line arguments
-# (interpreted as targets) and give them as arguments to the program.
-ifeq (run,$(firstword $(MAKECMDGOALS)))
-  # use the rest as arguments for "run"
-  RUN_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
-  # ...and turn them into do-nothing targets
-  $(eval $(RUN_ARGS):;@:)
-endif
+SHELL            := /bin/bash
 
 # ocamlbuild related 
-OCBFLAGS := -classic-display
-OCB := ocamlbuild $(OCBFLAGS)
+OCBFLAGS         := -classic-display
+OCB              := ocamlbuild $(OCBFLAGS)
 
 # Files extensions
-ML_EXT := ".ml"
-MLI_EXT := ".mli"
-CMA_EXT := ".cma"
+ML_EXT           := ".ml"
+MLI_EXT          := ".mli"
+CMA_EXT          := ".cma"
 
 # Directories
-SRC_DIR := "src"
-TESTS_DIR := "tests"
+SRC_DIR          := "src"
+TESTS_DIR        := "tests"
 
 # Sources files
-SRC_FILES := $(shell find $(SRC_DIR) -type f -name "*$(ML_EXT)")
-TESTS_FILES := $(shell find $(TESTS_DIR) -type f -name "*$(ML_EXT)")
-VERSION_FILE = $(SRC_DIR)/version.ml
-DOC_FILE := hws.docdir/index.html
+SRC_FILES        := $(shell find $(SRC_DIR) -type f -name "*$(ML_EXT)")
+TESTS_FILES      := $(shell find $(TESTS_DIR) -type f -name "*$(ML_EXT)")
+VERSION_FILE     := $(SRC_DIR)/version.ml
+DOC_FILE         := hws.docdir/index.html
 
 # Compiled files
-SRC_CMA_FILES := $(SRC_FILES:.ml=.cma)
-TESTS_CMA_FILES := $(TESTS_FILES:.ml=.cma)
-VERSION_CMA_FILE = $(VERSION_FILE:.ml=.cma)
+SRC_CMA_FILES    := $(SRC_FILES:.ml=.cma)
+TESTS_CMA_FILES  := $(TESTS_FILES:.ml=.cma)
+VERSION_CMA_FILE := $(VERSION_FILE:.ml=.cma)
 
 # Executables
-SRC_EXE := $(SRC_DIR)/main.native
-TESTS_EXE := $(TESTS_DIR)/tests.native
+SRC_EXE          := $(SRC_DIR)/main.native
+TESTS_EXE        := $(TESTS_DIR)/tests.native
 
 # Directories
-SRC_DIRS := $(shell find $(SRC_DIR) -type d)
-TESTS_DIRS := $(shell find $(TESTS_DIR) -type d)
+SRC_DIRS         := $(shell find $(SRC_DIR) -type d)
+TESTS_DIRS       := $(shell find $(TESTS_DIR) -type d)
 
 # Ocaml modules
-MODULES_ALL := ( $(shell find $(SRC_DIR) $(TESTS_DIR) -type f -name "*$(ML_EXT)" -exec basename -s "$(ML_EXT)" {} \;) )
-MODULES_MLI := ( $(shell find $(SRC_DIR) $(TESTS_DIR) -type f -name "*$(MLI_EXT)" -exec basename -s "$(MLI_EXT)" {} \;) )
+MODULES_ALL      := ( $(shell find $(SRC_DIR) $(TESTS_DIR) -type f -name "*$(ML_EXT)" -exec basename -s "$(ML_EXT)" {} \;) )
+MODULES_MLI      := ( $(shell find $(SRC_DIR) $(TESTS_DIR) -type f -name "*$(MLI_EXT)" -exec basename -s "$(MLI_EXT)" {} \;) )
 
 # .ocamlinit content
 define OCAMLINIT_BODY
@@ -76,11 +67,6 @@ doc: hws.odocl
 debug: $(SRC_CMA_FILES) $(TESTS_CMA_FILES) $(VERSION_CMA_FILE)
 
 # Launchers
-
-run: build
-	@echo "================================================================"
-	@echo
-	@./`basename $(SRC_EXE)` $(RUN_ARGS) || true
 
 runtests: tests
 	@echo "================================================================"

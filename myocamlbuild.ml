@@ -1,12 +1,12 @@
 open Ocamlbuild_plugin ;;
 
 (* Set the version number of the software in the plugin *)
-let project = "hws"
+let project     = "hws"
 let description = "A workspace manager for hackers."
-let major = 0
-let minor = 1
-let patch = 0
-let name   = "Poetic panda"
+let major       = 0
+let minor       = 1
+let patch       = 0
+let name        = "Poetic panda"
 
 (* Generate src/version.ml in the plugin *)
 let version_ml = "src/version.ml"

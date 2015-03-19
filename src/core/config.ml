@@ -21,12 +21,6 @@ let powerline         = ref false
 let utf8              = ref true
 let verbose           = ref false
 
-(* Modules *)
-let render = 
-  let (module D) : Display.display = (module Display.Utf8) in
-  let (module R) : Render.render = (module Render.Make (D)) in
-  ref ((module R) : Render.render)
-
 (* Constants *)
 let workspace_dirname = ".hws"
 let config_filename   = "config"
@@ -40,6 +34,12 @@ let workspace_dir     = ref ""
 let config_file       = ref ""
 let projects_file     = ref ""
 let ignore_file       = ref ""
+
+(* Modules *)
+let render = 
+  let (module D) : Display.display = (module Display.Utf8) in
+  let (module R) : Render.render = (module Render.Make (D)) in
+  ref ((module R) : Render.render)
 
 (* Select encoding according to flags *)
 let select_render () =
