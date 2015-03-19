@@ -110,6 +110,24 @@ let on_hi_white   = IntensiveBackground White
 (* Sequences helpers *)
 let reline = [ClearLine; MvFirstColumn]
 
+(* Function over styles and colors *)
+let invert = function
+  | Foreground color -> Background color
+  | Background color -> Foreground color
+  | IntensiveForeground color -> IntensiveBackground color
+  | IntensiveBackground color -> IntensiveForeground color
+  | Reset | Bold | Underline | Blink | Inverse as l -> l
+
+let complement = function
+  | Black   -> White
+  | Red     -> White
+  | Green   -> White
+  | Yellow  -> Black
+  | Blue    -> White
+  | Magenta -> Black
+  | Cyan    -> Black
+  | White   -> Black
+
 (* Type to code conversion *)
 let color_code = function
   | Black   -> 0

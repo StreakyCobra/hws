@@ -19,15 +19,18 @@ open Display;;
 
 module type Symbols =
 sig
-  val glider      : string
-  val branch      : string
-  val line        : string
-  val hold        : string
-  val right_plain : string
-  val right       : string
-  val left_plain  : string
-  val check       : string
-  val nocheck     : string
+  val glider       : string
+  val branch       : string
+  val line         : string
+  val hold         : string
+  val right_plain  : string
+  val right        : string
+  val left_plain   : string
+  val check        : string
+  val nocheck      : string
+  val box_top_left : string
+  val box_vertical : string
+  val box_bottom_left : string
 end
 
 type symbols = (module Symbols)
@@ -81,5 +84,20 @@ struct
     | Ascii     -> "[ ]"
     | Utf8      -> "✘"
     | Powerline -> "✘"
+
+  let box_top_left = match display_type with
+    | Ascii     -> "-"
+    | Utf8      -> "┌"
+    | Powerline -> "┌"
+
+  let box_vertical = match display_type with
+    | Ascii     -> "|"
+    | Utf8      -> "│"
+    | Powerline -> "│"
+
+  let box_bottom_left = match display_type with
+    | Ascii     -> "-"
+    | Utf8      -> "└"
+    | Powerline -> "└"
 
 end

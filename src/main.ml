@@ -26,7 +26,7 @@ let specs = ref []
 (* The list of commands available *)
 let cmds_list : command list = [
   (module Command.Make(Cmd_init));
-  (* (module Command.Make(Cmd_debug)); *)
+  (module Command.Make(Cmd_debug));
   (module Command.Make(Cmd_status));
   (module Command.Make(Cmd_version));
 ]

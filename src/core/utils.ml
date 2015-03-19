@@ -25,3 +25,15 @@ let is_directory arg =
   try Sys.is_directory arg
   (* If it fails, probably a symlink, ignore it *)
   with _ -> false
+
+let read_file filename =
+  let lines = ref [] in
+  let ic = open_in filename in
+  try
+    while true;
+    do
+      lines := input_line ic :: !lines
+    done; []
+  with
+  | End_of_file -> close_in ic; List.rev !lines
+  | e -> close_in_noerr ic; raise e

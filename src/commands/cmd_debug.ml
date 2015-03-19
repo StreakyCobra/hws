@@ -18,7 +18,7 @@
 let key = "debug"
 
 (* First space needed for help message alignment *)
-let doc = " Show informations about this workspace"
+let doc = " Show informations about the workspace"
 
 let specs = []
 
@@ -31,105 +31,38 @@ let handle_rest_arg arg =
   raise @@ Arg.Bad errmsg
 
 type content =
-  | File of string * string
-  | Folder of string * string
+  | File of string
+  | Folder of string
 
 let paths () = [
-  Folder ("Current directory" , !Config.original_dir);
-  Folder ("Workspace root" , !Config.workspace_root);
-  Folder ("Workspace directory" , !Config.workspace_dir);
-  File   ("Configuration file" , !Config.config_file);
-  File   ("Projects file" , !Config.projects_file);
-  File   ("Ignore file" , !Config.ignore_file);
+  "Current directory  " , Folder !Config.original_dir;
+  "Workspace root     " , Folder !Config.workspace_root;
+  "Workspace directory" , Folder !Config.workspace_dir;
+  "Configuration file " , File   !Config.config_file;
+  "Projects file      " , File   !Config.projects_file;
+  "Ignore file        " , File   !Config.ignore_file;
 ]
 
-(* Max length of the title to print *)
-let title_maxlength =
-  (* Get max length of a list with a fold *)
-  let maxlen = List.fold_left (fun a b -> max a @@ String.length b) 0 in
-  (* function to get only the title of File and Folder entries *)
-  let title = function | Folder (t,_) -> t | File (t, _) -> t in
-  (* Get max length of the titles of the paths *)
-  maxlen @@ List.map (title) @@ paths ()
-
-(* Return the spacing missing for a title to have all aligned *)
-let spacing title =
-  (* Length of the missing space *)
-  let diff = title_maxlength - (String.length title) in
-  (* Create the spacing *)
-  let result = ref "" in
-  for i = 0 to diff do
-    result := !result ^ " "
-  done;
-  (* Return it *)
-  !result
-
-let print_exists ?(long=false) title filename =
-  let (module S) = Config.symbols () in
-  let exist_sym = if Sys.file_exists filename then S.check else S.nocheck in
-  let oncolor, color = if Sys.file_exists filename then
-      (Ansi.on_green, Ansi.green)
-    else
-      (Ansi.on_yellow, Ansi.yellow) in
-  if long then
+let display_content (title, item) =
+  let (module R) = !Config.render in
+  let verb = !Config.verbose in
+  let path = match item with
+    | File path -> path
+    | Folder path -> path in
+  let exists = Sys.file_exists path in
+  let color = if exists
+      then Ansi.Green
+      else Ansi.Yellow in
+  print_endline @@ R.content_header ~exp:verb ~color:color ~pre:title path;
+  if verb then
     begin
-      Ansi.print [Ansi.black; oncolor] title;
-      Ansi.print [color] S.right_plain
+      let func = match item with
+      | File _ -> R.file_content
+      | Folder _ -> R.dir_content in
+      if exists then print_endline @@ func ~color:color path;
+      print_endline @@ R.content_closer ~color:color ();
+      print_endline ""
     end
-  else
-    begin
-      Ansi.print [] title;
-      Ansi.print [] ":";
-    end;
-  Ansi.print [] @@ spacing title;
-  Ansi.print [color] @@ " " ^ exist_sym ^ " " ;
-  Ansi.print_nl [color] filename
-
-let read_file filename =
-  let lines = ref [] in
-  let ic = open_in filename in
-  try
-    while true;
-    do
-      lines := input_line ic :: !lines
-    done; []
-  with
-  | End_of_file -> close_in ic; List.rev !lines
-  | e -> close_in_noerr ic; raise e
-
-
-let print_content filename = if Sys.file_exists filename then
-    begin
-      let content = read_file filename in
-      let print_indent path =
-        begin
-          Ansi.print [Ansi.on_green] " ";
-          print_endline @@ " " ^ path
-        end in
-      List.iter print_indent content;
-    end;
-  print_endline ""
-
-let print_listing dirname =
-  let relative = Filename.concat dirname in
-  let content = Array.to_list @@ Sys.readdir dirname in
-  let print_indent path =
-    begin
-      Ansi.print [Ansi.on_green] " ";
-      print_string @@
-      if Utils.is_directory @@ relative path then " d " else " - ";
-      print_endline path
-    end in
-  List.iter (print_indent) content;
-  print_endline ""
-
-let display_content ?(verbose=false) = function
-  | File (title, path) ->
-    print_exists ~long:!Config.verbose title path;
-    if verbose then print_content path
-  | Folder (title, path) ->
-    print_exists ~long:!Config.verbose title path;
-    if verbose then print_listing path
 
 let execute () =
-  List.iter (display_content ~verbose:!Config.verbose) @@ paths ()
+  List.iter display_content @@ paths ()

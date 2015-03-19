@@ -24,3 +24,6 @@ val flip : ('a -> 'b -> 'c) -> 'b -> 'a -> 'c
 val is_directory : string -> bool
 (** The Sys.is_directory function have a problem with symbolic links. Wrapper to
     ignore such errors. *)
+
+val read_file : string -> string list
+(** Read the content of a file. *)
