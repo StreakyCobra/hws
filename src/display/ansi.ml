@@ -143,7 +143,7 @@ let ansi_code = function
   | ClearLine   -> "2K"
   | MvFirstColumn  -> "0G"
 
-let rec sgr styles =
+let sgr styles =
   let beg = if styles = [] then "" else csi in
   let rec sgr' styles = match styles with
     | []    -> ""

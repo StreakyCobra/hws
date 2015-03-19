@@ -90,7 +90,7 @@ let main () =
   (* First read the configuration file *)
   Config.read_config ();
   (* Set the specifications array *)
-  specs := Arg.align @@ cmds_specs () @ general_specs ();
+  specs := Arg.align (cmds_specs () @ general_specs ());
   (* Parse arguments, overwrite the config setted by the config file *)
   Arg.parse_dynamic specs handle_anon_arg @@ R.project_summary ();
   (* Setup the configuration *)
