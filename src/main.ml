@@ -47,14 +47,14 @@ let ensure_cmd () = match !cmd with
 let handle_rest_arg arg =
   ensure_cmd ();
   match !cmd with
-  | None -> failwith "Internal Error" (* Must never happen due to the 'ensure_cmd' *)
+  | None -> failwith "Internal Error" (* Must never happen after 'ensure_cmd' *)
   | Some (module Cmd) -> Cmd.handle_rest_arg arg
 
 (* General specifications. Description MUST contains a space at beginning for
    correct alignment. *)
 let general_specs () = [
   ("-v"        , Arg.Set Config.verbose   , " Enable verbose output");
-  ("-p"        , Arg.Set Config.powerline , " Enable powerline glyph. Implies utf8 enabled.");
+  ("-p"        , Arg.Set Config.powerline , " Enable powerline glyph");
   ("--noutf8"  , Arg.Clear Config.utf8    , " Disable utf8 symbols");
   ("--nocolor" , Arg.Clear Config.colored , " Disable colored output");
   ("--"        , Arg.Rest handle_rest_arg , " Rest of arguments");
@@ -64,7 +64,8 @@ let general_specs () = [
 let select_cmd arg =
   let rec find_cmd cmds : command = match cmds with
     | [] -> raise @@ Arg.Bad ("'" ^ arg ^ "' is not a recognized subcommand")
-    | (module Cmd : Command) :: xs -> if arg = Cmd.key then (module Cmd) else find_cmd xs in
+    | (module Cmd : Command) :: xs ->
+      if Cmd.key = arg then (module Cmd) else find_cmd xs in
   let (module Cmd) = find_cmd cmds_list in
   cmd := Some (module Cmd);
   specs := Arg.align (Cmd.specs @ general_specs ())
@@ -80,7 +81,7 @@ let handle_anon_arg arg = match !cmd with
 let run_cmd () = 
   ensure_cmd ();
   match !cmd with
-  | None -> failwith "Internal Error" (* Must never happen due to the 'ensure_cmd' *)
+  | None -> failwith "Internal Error" (* Must never happen after 'ensure_cmd' *)
   | Some (module Cmd) -> Cmd.execute ()
 
 (* Main function, run the application *)
@@ -100,12 +101,15 @@ let main () =
 (* Hack to disable colors soon enough if "--nocolor" flag is given, otherwise
  * help message is always shown in color. *)
 let color_hack () =
-  if List.exists (fun a -> a = "--nocolor") (Array.to_list Sys.argv) then Config.colored := false
+  if List.exists (fun a -> a = "--nocolor") (Array.to_list Sys.argv) then
+    Config.colored := false
 
 (* Execute the main function, except when launched from the toplevel *)
 let () = if not !Sys.interactive then
     begin
       color_hack ();
       try main () with
-      | Failure a -> prerr_endline @@ Ansi.format [Ansi.Bold; Ansi.red] "Error: " ^ a
+      | Failure a ->
+        let errmsg = Ansi.format [Ansi.Bold; Ansi.red] "Error: " ^ a in
+        prerr_endline errmsg
     end

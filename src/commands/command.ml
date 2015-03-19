@@ -36,5 +36,5 @@ type command = (module Command)
 module Make (Cmd : Command_provider) : Command =
 struct
   include Cmd
-  let to_spec () = (Ansi.format [Ansi.red] Cmd.key, Arg.Set (ref false), Cmd.doc)
+  let to_spec () = Ansi.format [Ansi.red] Cmd.key, Arg.Set (ref false), Cmd.doc
 end

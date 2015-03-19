@@ -22,9 +22,13 @@ let doc = " Show informations about this workspace"
 
 let specs = []
 
-let handle_anon_arg arg = raise @@ Arg.Bad ("'" ^ arg ^ "' argument not supported")
+let handle_anon_arg arg =
+  let errmsg = "'" ^ arg ^ "' argument not supported" in
+  raise @@ Arg.Bad errmsg
 
-let handle_rest_arg arg = raise @@ Arg.Bad ("'" ^ arg ^ "' argument not supported")
+let handle_rest_arg arg =
+  let errmsg = "'" ^ arg ^ "' argument not supported" in
+  raise @@ Arg.Bad errmsg
 
 type content =
   | File of string * string
@@ -112,7 +116,8 @@ let print_listing dirname =
   let print_indent path =
     begin
       Ansi.print [Ansi.on_green] " ";
-      print_string @@ if Utils.is_directory @@ relative path then " d " else " - ";
+      print_string @@
+      if Utils.is_directory @@ relative path then " d " else " - ";
       print_endline path
     end in
   List.iter (print_indent) content;
@@ -126,4 +131,5 @@ let display_content ?(verbose=false) = function
     print_exists ~long:!Config.verbose title path;
     if verbose then print_listing path
 
-let execute () = List.iter (display_content ~verbose:!Config.verbose) @@ paths ()
+let execute () =
+  List.iter (display_content ~verbose:!Config.verbose) @@ paths ()

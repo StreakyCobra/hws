@@ -22,9 +22,13 @@ let doc = " Initialize the workspace"
 
 let specs = []
 
-let handle_anon_arg arg = raise @@ Arg.Bad ("'" ^ arg ^ "' argument not supported")
+let handle_anon_arg arg =
+  let errmsg = "'" ^ arg ^ "' argument not supported" in
+  raise @@ Arg.Bad errmsg
 
-let handle_rest_arg arg = raise @@ Arg.Bad ("'" ^ arg ^ "' argument not supported")
+let handle_rest_arg arg =
+  let errmsg = "'" ^ arg ^ "' argument not supported" in
+  raise @@ Arg.Bad errmsg
 
 let execute () =
   let (module R) = !Config.render in
