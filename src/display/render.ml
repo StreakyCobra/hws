@@ -25,10 +25,10 @@ sig
   val indent          : string -> string
   val project_summary : unit -> string
   val branch          : string -> string
-  val content_header  : ?exp:bool -> ?color:Ansi.color -> ?pre:string -> string -> string
-  val file_content    : ?color:Ansi.color -> string -> string
-  val dir_content     : ?color:Ansi.color -> string -> string
-  val content_closer  : ?color:Ansi.color -> unit -> string
+  val content_header  : ?exp:bool -> ?color:color -> ?pre:string -> string -> string
+  val file_content    : ?color:color -> string -> string
+  val dir_content     : ?color:color -> string -> string
+  val content_closer  : ?color:color -> unit -> string
 end
 
 type render = (module Render)
@@ -41,8 +41,8 @@ struct
   let indent = (^) "    "
 
   let project_summary () =
-    let project = Ansi.format [Ansi.blue; Ansi.Bold] Version.project in
-    let description = Ansi.format [Ansi.blue] Version.description in
+    let project = format [blue; Bold] Version.project in
+    let description = format [blue] Version.description in
     project ^ ", " ^ description
 
   let branch name =
@@ -54,12 +54,12 @@ struct
     let expsym = if exp then S.box_top_left ^ " " else "" in
     let sym = match D.display_type with
       | Ascii | Utf8 ->
-        Ansi.format [Background color; black;] ">"
+        format [Background color; black;] ">"
       | Powerline ->
-        Ansi.format [Foreground color] S.right_plain
+        format [Foreground color] S.right_plain
     in
     String.concat "" [
-      Ansi.format [Background color; black;] @@
+      format [Background color; black;] @@
       expsym ^ pre ^ " "; sym ^ " " ^ filename]
 
   let file_content ?(color=White) filename =
@@ -67,7 +67,7 @@ struct
     let content = read_file filename in
     let c_indent path =
       begin
-        Ansi.format [Background color; black;] S.box_vertical ^ " " ^ path
+        format [Background color; black;] S.box_vertical ^ " " ^ path
       end
     in String.concat "\n" @@ List.map c_indent content
 
@@ -78,15 +78,15 @@ struct
     let c_indent path =
       begin
         let tpe = if Utils.is_directory @@ relative path
-          then Ansi.format [blue] " d "
-          else Ansi.format [red] " - " in
-      Ansi.format [Background color; black;] S.box_vertical ^ tpe ^ path
+          then format [blue] " d "
+          else format [red] " - " in
+      format [Background color; black;] S.box_vertical ^ tpe ^ path
       end in
     String.concat "\n" @@ List.map c_indent content
 
   let content_closer ?(color=White) () =
     let (module S) : symbols = symbols in
-    Ansi.format [Background color; black;] S.box_bottom_left
+    format [Background color; black;] S.box_bottom_left
 
 end
 
