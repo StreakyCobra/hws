@@ -20,7 +20,7 @@ clean:
 	rm -rf $(MAN_FILES)
 	rm -rf $(HTML_FILES)
 
-viewdoc: $(HTML_FILES)
+viewman: $(HTML_FILES)
 	xdg-open $(HTML_INDEX)
 
 # Files

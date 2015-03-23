@@ -69,7 +69,7 @@ doc: $(ODOC_FILE)
 	$(OCB) $(ODOC_INDEX)
 
 man:
-	cd $(DOC_DIR); $(MAKE)
+	cd $(DOC_DIR); $(MAKE) all
 
 debug: $(SRC_CMA_FILES) $(TESTS_CMA_FILES) $(VERSION_CMA_FILE)
 
@@ -82,6 +82,9 @@ runtests: tests
 
 viewdoc: doc
 	xdg-open $(ODOC_INDEX)
+
+viewman: man
+	cd $(DOC_DIR); $(MAKE) $@
 
 top: debug $(TOP_FILE)
 	utop
