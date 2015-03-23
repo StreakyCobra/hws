@@ -66,6 +66,14 @@ doc: hws.odocl
 
 debug: $(SRC_CMA_FILES) $(TESTS_CMA_FILES) $(VERSION_CMA_FILE)
 
+version:
+	@cat myocamlbuild.ml \
+	  | grep -e '^let \(major\|minor\|patch\)' \
+	  | cut -f2 -d= \
+          | tr "\\n" "." \
+          | tr -d " " \
+	  | sed 's/\.$$/\n/g'
+
 # Launchers
 
 runtests: tests
