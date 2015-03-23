@@ -1,0 +1,28 @@
+HWS.CONF(5)
+===========
+:doctype: manpage
+
+NAME
+----
+hws.conf - configuration files for 'hws'
+
+
+SYNOPSIS
+--------
+The workspace manager 'hws' use different configuration files to customize it to
+your needs.
+
+
+DESCRIPTION
+-----------
+
+TODO
+
+
+SEE ALSO
+--------
+
+linkman:hws[1]
+
+
+include::footer.adoc[]

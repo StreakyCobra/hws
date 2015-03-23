@@ -11,14 +11,18 @@ MLI_EXT          := ".mli"
 CMA_EXT          := ".cma"
 
 # Directories
+DOC_DIR          := "doc"
 SRC_DIR          := "src"
 TESTS_DIR        := "tests"
+ODOC_DIR         := "hws.docdir"
 
 # Sources files
 SRC_FILES        := $(shell find $(SRC_DIR) -type f -name "*$(ML_EXT)")
 TESTS_FILES      := $(shell find $(TESTS_DIR) -type f -name "*$(ML_EXT)")
 VERSION_FILE     := $(SRC_DIR)/version.ml
-DOC_FILE         := hws.docdir/index.html
+TOP_FILE         := .ocamlinit
+ODOC_FILE        := hws.odocl
+ODOC_INDEX       := $(ODOC_DIR)/index.html
 
 # Compiled files
 SRC_CMA_FILES    := $(SRC_FILES:.ml=.cma)
@@ -53,7 +57,7 @@ export OCAMLINIT_BODY
 
 # Default target
 
-all: build
+all: build tests doc man debug
 
 # Compilation targets
 
@@ -61,8 +65,11 @@ build: $(SRC_EXE)
 
 tests: $(TESTS_EXE)
 
-doc: hws.odocl
-	$(OCB) $(DOC_FILE)
+doc: $(ODOC_FILE)
+	$(OCB) $(ODOC_INDEX)
+
+man:
+	cd $(DOC_DIR); $(MAKE)
 
 debug: $(SRC_CMA_FILES) $(TESTS_CMA_FILES) $(VERSION_CMA_FILE)
 
@@ -82,22 +89,23 @@ runtests: tests
 	@./`basename $(TESTS_EXE)` || true
 
 viewdoc: doc
-	xdg-open $(DOC_FILE)
+	xdg-open $(ODOC_INDEX)
 
-top: debug .ocamlinit
+top: debug $(TOP_FILE)
 	utop
 
 # Clean all this
 
 clean:
 	$(OCB) -clean
-	$(RM) .ocamlinit
-	$(RM) hws.odocl
+	$(RM) $(TOP_FILE)
+	$(RM) $(ODOC_FILE)
 	$(RM) $(VERSION_FILE)*
+	cd $(DOC_DIR); $(MAKE) $@
 
-# Dynamically generated files liting Ocaml modules
+# Dynamically generated files
 
-hws.odocl:
+$(ODOC_FILE):
 	@echo -e "\e[91m$@: Generation\e[0m"
 	@declare -a VALS=$(MODULES_MLI) \
 		; echo $${VALS[@]^} \
@@ -105,7 +113,7 @@ hws.odocl:
 		> $@
 	@echo -e "\e[92m$@: Generated\e[0m"
 
-.ocamlinit:
+$(TOP_FILE):
 	@echo -e "\e[91m$@: Generation\e[0m"
 	@echo "$$OCAMLINIT_BODY" > $@
 	@echo >> $@
@@ -141,4 +149,4 @@ hws.odocl:
 %.native:
 	$(OCB) $@
 
-.PHONY: all build debug tests doc run runtests viewdoc top clean hws.odocl .ocamlinit
+.PHONY: all build tests doc man debug runtests viewdoc top clean $(ODOC_FILE) $(TOP_FILE)
