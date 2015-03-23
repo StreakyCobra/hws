@@ -2,7 +2,7 @@
 SHELL           := /bin/bash
 
 # Get version number
-VERSION         := $(shell cd ..; make version)
+VERSION         := $(shell cd ..; ./version.sh)
 
 # Parameters
 DOC_FILES        := $(wildcard *.[0-9].adoc)
