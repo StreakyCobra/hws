@@ -48,10 +48,6 @@ define OCAMLINIT_BODY
 
 (* Use topfind to find packages *)
 #use "topfind" ;;
-
-(* Require all dependencies *)
-#require "unix" ;;
-#require "oUnit" ;;
 endef
 export OCAMLINIT_BODY
 
@@ -111,6 +107,17 @@ $(ODOC_FILE):
 $(TOP_FILE):
 	@echo -e "\e[91m$@: Generation\e[0m"
 	@echo "$$OCAMLINIT_BODY" > $@
+	@echo "(* Require all dependencies *)" >> $@
+	@find $(SRC_DIR) $(TESTS_DIR) -name '_tags' \
+		| xargs cat \
+		| tr ':,' '\n\n' \
+		| grep package \
+		| grep -oe '(.*)' \
+		| tr -d "()" \
+		| uniq \
+		| sed -e 's/^/#require "/' \
+		| sed -e 's/$$/";;/' \
+		>> $@
 	@echo >> $@
 	@echo "(* Add directories *)" >> $@
 	@declare -a VALS=($(SRC_DIRS)) \
