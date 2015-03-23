@@ -11,10 +11,10 @@ MLI_EXT          := ".mli"
 CMA_EXT          := ".cma"
 
 # Directories
-DOC_DIR          := "doc"
+MAN_DIR          := "man"
 SRC_DIR          := "src"
 TESTS_DIR        := "tests"
-ODOC_DIR         := "hws.docdir"
+DOC_DIR          := "hws.docdir"
 
 # Sources files
 SRC_FILES        := $(shell find $(SRC_DIR) -type f -name "*$(ML_EXT)")
@@ -22,7 +22,7 @@ TESTS_FILES      := $(shell find $(TESTS_DIR) -type f -name "*$(ML_EXT)")
 VERSION_FILE     := $(SRC_DIR)/version.ml
 TOP_FILE         := .ocamlinit
 ODOC_FILE        := hws.odocl
-ODOC_INDEX       := $(ODOC_DIR)/index.html
+ODOC_INDEX       := $(DOC_DIR)/index.html
 
 # Compiled files
 SRC_CMA_FILES    := $(SRC_FILES:.ml=.cma)
@@ -69,7 +69,7 @@ doc: $(ODOC_FILE)
 	$(OCB) $(ODOC_INDEX)
 
 man:
-	cd $(DOC_DIR); $(MAKE) all
+	cd $(MAN_DIR); $(MAKE) all
 
 debug: $(SRC_CMA_FILES) $(TESTS_CMA_FILES) $(VERSION_CMA_FILE)
 
@@ -84,7 +84,7 @@ viewdoc: doc
 	xdg-open $(ODOC_INDEX)
 
 viewman: man
-	cd $(DOC_DIR); $(MAKE) $@
+	cd $(MAN_DIR); $(MAKE) $@
 
 top: debug $(TOP_FILE)
 	utop
@@ -96,7 +96,7 @@ clean:
 	$(RM) $(TOP_FILE)
 	$(RM) $(ODOC_FILE)
 	$(RM) $(VERSION_FILE)*
-	cd $(DOC_DIR); $(MAKE) $@
+	cd $(MAN_DIR); $(MAKE) $@
 
 # Dynamically generated files
 
@@ -144,4 +144,4 @@ $(TOP_FILE):
 %.native:
 	$(OCB) $@
 
-.PHONY: all build tests doc man debug runtests viewdoc top clean $(ODOC_FILE) $(TOP_FILE)
+.PHONY: all build tests doc man debug runtests viewdoc viewman top clean $(ODOC_FILE) $(TOP_FILE)

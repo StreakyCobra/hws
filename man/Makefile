@@ -5,13 +5,13 @@ SHELL           := /bin/bash
 VERSION         := $(shell cd ..; ./version.sh)
 
 # Parameters
-DOC_FILES        := $(wildcard *.[0-9].adoc)
-MAN_FILES        := $(DOC_FILES:.adoc=)
-HTML_FILES       := $(DOC_FILES:.adoc=.html)
-HTML_INDEX       := hws.1.html
-ASCIIDOC_CONF    := asciidoc.conf
-ASCIIDOC_OPTS    := -f $(ASCIIDOC_CONF) \
-                    -a hws_version=$(VERSION)
+DOC_FILES       := $(wildcard *.[0-9].adoc)
+MAN_FILES       := $(DOC_FILES:.adoc=)
+HTML_FILES      := $(DOC_FILES:.adoc=.html)
+HTML_INDEX      := hws.1.html
+ASCIIDOC_CONF   := asciidoc.conf
+ASCIIDOC_OPTS   := -f $(ASCIIDOC_CONF) \
+                   -a hws_version=$(VERSION)
 
 # Targets
 all: $(MAN_FILES) $(HTML_FILES)
