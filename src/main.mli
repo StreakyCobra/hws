@@ -18,4 +18,4 @@
 (** Entry point of the program *)
 
 val main : unit -> unit
-(** The main function of the program: run it. *) 
+(** The main function of the program to execute it *)

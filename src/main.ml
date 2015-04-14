@@ -13,7 +13,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with hws.  If not, see <http://www.gnu.org/licenses/>. *)
+ * along with hws.  If not, see <http://www.gnu.org/licenses/> *)
 
 open Command;;
 
@@ -43,7 +43,7 @@ let ensure_cmd () = match !cmd with
   | Some _ -> ()
 
 (* Handle the rest arguments, after the "--". Ensure the default subcommand is
-   selected if none. *)
+   selected if none *)
 let handle_rest_arg arg =
   ensure_cmd ();
   match !cmd with
@@ -51,7 +51,7 @@ let handle_rest_arg arg =
   | Some (module Cmd) -> Cmd.handle_rest_arg arg
 
 (* General specifications. Description MUST contains a space at beginning for
-   correct alignment. *)
+   correct alignment *)
 let general_specs () = [
   ("-v"        , Arg.Set Config.verbose   , " Enable verbose output");
   ("-p"        , Arg.Set Config.powerline , " Enable powerline glyph");
@@ -71,13 +71,13 @@ let select_cmd arg =
   specs := Arg.align (Cmd.specs @ general_specs ())
 
 (* Handle anonymous arguments. If a command is already selected, give it the
-argument. Otherwise use this argument to select the subcommand. *)
+argument. Otherwise use this argument to select the subcommand *)
 let handle_anon_arg arg = match !cmd with
   | None -> select_cmd arg
   | Some (module Cmd) -> Cmd.handle_anon_arg arg
 
 (* Execute the selected command. Ensure the default subcommand is selected if
-   none. *)
+   none *)
 let run_cmd () = 
   ensure_cmd ();
   match !cmd with
@@ -99,12 +99,12 @@ let main () =
   run_cmd ()
 
 (* Hack to disable colors soon enough if "--nocolor" flag is given, otherwise
- * help message is always shown in color. *)
+ * help message is always shown in color *)
 let color_hack () =
   if List.exists (fun a -> a = "--nocolor") (Array.to_list Sys.argv) then
     Config.colored := false
 
-(* Print a message on *)
+(* Print a fail message *)
 let fail msg = 
   flush stdout;
   prerr_endline @@ Ansi.format [Ansi.Bold; Ansi.red] "Error: " ^ msg;
