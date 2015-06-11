@@ -1,0 +1,49 @@
+HWS(1)
+======
+:doctype: manpage
+
+NAME
+----
+hws - A workspace manager for hackers
+
+
+SYNOPSIS
+--------
+*hws* 'COMMAND' ['OPTIONS'] ['--'] ['TARGETS']
+
+
+DESCRIPTION
+-----------
+The hws(1) software helps to manage workspaces composed of several VCS
+repositories. Currently these VCS are supported:
+
+- git
+- mercurial
+- darcs
+
+
+COMMANDS
+--------
+
+**init**::
+
+        Initialize a workspace in the current folder by looking for existing
+        repositories.
+
+**status**::
+
+        Display the status of the workspace.
+
+**debug**::
+
+        Show debug informations about the workspace, like path and content of
+        configuration files and folders.
+
+
+SEE ALSO
+--------
+
+linkman:hws.conf[5], linkman:git[1]
+
+
+include::footer.adoc[]
