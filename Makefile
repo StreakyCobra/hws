@@ -1,7 +1,7 @@
 # Use bash
 SHELL            := /bin/bash
 
-# ocamlbuild related 
+# ocamlbuild related
 OCBFLAGS         := -classic-display
 OCB              := ocamlbuild $(OCBFLAGS)
 
